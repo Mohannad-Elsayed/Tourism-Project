@@ -35,6 +35,8 @@
                 })
                 .then(data => {
                     document.getElementById('topnavbar').innerHTML = data;
+
+                    // After injecting the navbar, the script inside topnavbar.html will run
                 })
                 .catch(error => {
                     console.error('Error fetching topnavbar:', error);

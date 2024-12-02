@@ -11,15 +11,15 @@
         </div>
         <div class="col-lg-4 text-center text-lg-end">
             <div class="d-inline-flex align-items-center" style="height: 45px;">
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
                         class="fab fa-twitter fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
                         class="fab fa-facebook-f fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
                         class="fab fa-linkedin-in fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#"><i
                         class="fab fa-instagram fw-normal"></i></a>
-                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href=""><i
+                <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href="#"><i
                         class="fab fa-youtube fw-normal"></i></a>
             </div>
         </div>
@@ -27,11 +27,10 @@
 </div>
 <!-- Topbar End -->
 
-
 <!-- Navbar Start -->
 <div class="container-fluid position-relative p-0">
     <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
-        <a href="" class="navbar-brand p-0">
+        <a href="index.html" class="navbar-brand p-0">
             <h1 class="text-primary m-0"><i class="fa fa-map-marker-alt me-3"></i>Tourist</h1>
             <!-- <img src="img/logo.png" alt="Logo"> -->
         </a>
@@ -45,20 +44,54 @@
                 <a href="service.html" class="nav-item nav-link">Services</a>
                 <a href="package.html" class="nav-item nav-link">Packages</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown">Pages</a>
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <a href="destination.html" class="dropdown-item">Destination</a>
                         <a href="booking.html" class="dropdown-item">Booking</a>
                         <a href="team.html" class="dropdown-item">Travel Guides</a>
                         <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item active">404 Page</a>
+                        <a href="404.html" class="dropdown-item">404 Page</a>
                     </div>
                 </div>
                 <a href="contact.html" class="nav-item nav-link">Contact</a>
             </div>
-            <a href="" class="btn btn-primary rounded-pill py-2 px-4">Register</a>
+            <a href="register.html" class="btn btn-primary rounded-pill py-2 px-4">Register</a>
         </div>
     </nav>
-
 </div>
 <!-- Navbar End -->
+
+<!-- Active Link Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Get the current page's filename
+        const currentPage = window.location.pathname.split('/').pop();
+
+        // Select all navigation links
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+        navLinks.forEach(link => {
+            const linkPage = link.getAttribute('href');
+
+            // Check if the link's href matches the current page
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+            }
+        });
+
+        // Handle dropdown menu items
+        const dropdownLinks = document.querySelectorAll('.dropdown-menu .dropdown-item');
+        dropdownLinks.forEach(link => {
+            const linkPage = link.getAttribute('href');
+
+            if (linkPage === currentPage) {
+                // Add 'active' class to the parent dropdown
+                const parentDropdown = link.closest('.nav-item.dropdown');
+                if (parentDropdown) {
+                    const dropdownToggle = parentDropdown.querySelector('.dropdown-toggle');
+                    dropdownToggle.classList.add('active');
+                }
+            }
+        });
+    });
+</script>
