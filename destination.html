@@ -9,6 +9,18 @@
                 document.head.innerHTML += data;
             });
     </script>
+    <!-- Include common head elements -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Include Bootstrap CSS or your theme's CSS -->
+    <link rel="stylesheet" href="path/to/bootstrap.min.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
 
 <body>
@@ -22,39 +34,30 @@
     <!-- Spinner End -->
 
 
-    <!-- Topbar + Navbar Start -->
+    <!-- Top Navbar -->
     <div id="topnavbar"></div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('topnavbar.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('topnavbar').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error fetching topnavbar:', error);
-                });
-        });
+        fetch('topnavbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('topnavbar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error fetching topnavbar:', error);
+            });
     </script>
-    <!-- Topbar + Navbar End -->
-
 
     <!-- Hero Start -->
     <div class="container-fluid bg-primary py-5 mb-5 hero-header">
         <div class="container py-5">
             <div class="row justify-content-center py-5">
                 <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Destination</h1>
+                    <h1 class="display-3 text-white animated slideInDown">Dashboard</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
                             <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Destination</li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Dashboard</li>
                         </ol>
                     </nav>
                 </div>
@@ -63,86 +66,56 @@
     </div>
     <!-- Hero End -->
 
+    <!-- Main Content -->
+    <div class="container py-5">
+        <!-- User Info Section -->
+        <div id="user-info" class="mb-5">
+            <!-- User information will be displayed here -->
+        </div>
 
-    <!-- Destination Start -->
-    <div class="container-xxl py-5 destination">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <h6 class="section-title bg-white text-center text-primary px-3">Destination</h6>
-                <h1 class="mb-5">Popular Destination</h1>
-            </div>
-            <div class="row g-3">
-                <div class="col-lg-7 col-md-6">
-                    <div class="row g-3">
-                        <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
-                            <a class="position-relative d-block overflow-hidden" href="">
-                                <img class="img-fluid" src="img/destination-1.jpg" alt="">
-                                <div class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">
-                                    30% OFF</div>
-                                <div
-                                    class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                    Thailand</div>
-                            </a>
-                        </div>
-                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
-                            <a class="position-relative d-block overflow-hidden" href="">
-                                <img class="img-fluid" src="img/destination-2.jpg" alt="">
-                                <div class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">
-                                    25% OFF</div>
-                                <div
-                                    class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                    Malaysia</div>
-                            </a>
-                        </div>
-                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
-                            <a class="position-relative d-block overflow-hidden" href="">
-                                <img class="img-fluid" src="img/destination-3.jpg" alt="">
-                                <div class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">
-                                    35% OFF</div>
-                                <div
-                                    class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                                    Australia</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
-                    <a class="position-relative d-block h-100 overflow-hidden" href="">
-                        <img class="img-fluid position-absolute w-100 h-100" src="img/destination-4.jpg" alt=""
-                            style="object-fit: cover;">
-                        <div class="bg-white text-danger fw-bold position-absolute top-0 start-0 m-3 py-1 px-2">20% OFF
-                        </div>
-                        <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2">
-                            Indonesia</div>
-                    </a>
-                </div>
+        <!-- Booked Tours Section -->
+        <div id="booked-tours" class="mb-5">
+            <h2>Your Booked Tours</h2>
+            <div class="row" id="tours-container">
+                <!-- Tour cards will be inserted here -->
             </div>
         </div>
+
+        <!-- Feedback Form Section -->
+        <div id="feedback-section">
+            <h2>Give Feedback</h2>
+            <form id="feedback-form" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="tourName" class="form-label">Tour Name</label>
+                    <input type="text" class="form-control" id="tourName" required>
+                    <div class="invalid-feedback">
+                        Please enter the tour name.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="feedbackText" class="form-label">Your Feedback</label>
+                    <textarea class="form-control" id="feedbackText" rows="4" required></textarea>
+                    <div class="invalid-feedback">
+                        Please provide your feedback.
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+            </form>
+        </div>
     </div>
-    <!-- Destination Start -->
 
-
-    <!-- Footer Start -->
+    <!-- Footer -->
     <div id="footer"></div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('footer.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('footer').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error fetching footer:', error);
-                });
-        });
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error fetching footer:', error);
+            });
     </script>
-    <!-- Footer End -->
-
 
     <!-- Back to Top -->
     <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
@@ -161,6 +134,8 @@
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <!-- Your custom JavaScript -->
+    <script src="js/dashboard.js"></script>
 </body>
 
 </html>

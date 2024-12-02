@@ -131,7 +131,6 @@ document.getElementById('register-form').addEventListener('submit', async functi
         // Notify the user of successful registration
         alert('Registration successful! Please check your email to verify your account. Then you can login.');
 
-        // !Redirect the user or reset the form
         window.location.href = 'register.html'; // Redirect to login page
     } catch (error) {
         console.error('Error during registration:', error);
@@ -187,7 +186,10 @@ document.getElementById('login-form').addEventListener('submit', async function(
             return;
         }
 
-        // Redirect the user to the dashboard or home page
+        // Set login status
+        localStorage.setItem('isLoggedIn', 'true');
+
+        // Redirect the user to the homepage or dashboard
         window.location.href = 'index.html'; // Redirect to home page
     } catch (error) {
         console.error('Error during login:', error);
