@@ -3,7 +3,8 @@ const firebaseConfig = {
     apiKey: "AIzaSyBB_8JRR7pehfVX2lNy_xJWwkSSlKgYghU",
     authDomain: "sa-project-edu.firebaseapp.com",
     projectId: "sa-project-edu",
-    storageBucket: "sa-project-edu.firebasestorage.app",
+    // Remove or comment out storageBucket if not using Firebase Storage
+    // storageBucket: "sa-project-edu.appspot.com",
     messagingSenderId: "360441031760",
     appId: "1:360441031760:web:74b6f95d885cef9934b555",
     measurementId: "G-6C2JWVGH4Y"
@@ -15,7 +16,6 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and Firestore
 const auth = firebase.auth();
 const db = firebase.firestore();
-const storage = firebase.storage();
 
 // JavaScript Validation for Registration Form
 document.getElementById('register-form').addEventListener('submit', async function (event) {
@@ -92,11 +92,25 @@ document.getElementById('register-form').addEventListener('submit', async functi
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
-        // Upload profile picture to Firebase Storage
-        const storageRefPath = `profilePictures/${user.uid}/${profilePicture.name}`;
-        const storageRef = storage.ref(storageRefPath);
-        const uploadTaskSnapshot = await storageRef.put(profilePicture);
-        const profilePictureURL = await uploadTaskSnapshot.ref.getDownloadURL();
+        // Upload profile picture to Cloudinary
+        const formData = new FormData();
+        formData.append('file', profilePicture);
+        formData.append('upload_preset', 'saprojectedu'); // Replace with your upload preset
+
+        const cloudName = 'dprlulqf4'; // Replace with your Cloudinary cloud name
+        const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+        const uploadResponse = await fetch(uploadUrl, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!uploadResponse.ok) {
+            throw new Error('Image upload failed.');
+        }
+
+        const uploadData = await uploadResponse.json();
+        const profilePictureURL = uploadData.secure_url;
 
         // Create user data object
         const userData = {
