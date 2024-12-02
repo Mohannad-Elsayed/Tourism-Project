@@ -29,7 +29,7 @@
 
 <!-- Navbar Start -->
 <div class="container-fluid position-relative p-0">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
         <a href="index.html" class="navbar-brand p-0">
             <h1 class="text-primary m-0"><i class="fa fa-map-marker-alt me-3"></i>Tourist</h1>
             <!-- <img src="img/logo.png" alt="Logo"> -->
@@ -38,22 +38,12 @@
             <span class="fa fa-bars"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ms-auto py-0">
-
-                <!-- Elements visible to all users -->
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a href="about.html" class="nav-link">About</a>
-                </li>
-                <li class="nav-item">
-                    <a href="service.html" class="nav-link">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a href="package.html" class="nav-link">Packages</a>
-                </li>
-                <li class="nav-item dropdown">
+            <div class="navbar-nav ms-auto py-0">
+                <a href="index.html" class="nav-item nav-link">Home</a>
+                <a href="about.html" class="nav-item nav-link">About</a>
+                <a href="service.html" class="nav-item nav-link">Services</a>
+                <a href="package.html" class="nav-item nav-link">Packages</a>
+                <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
                         <a href="destination.html" class="dropdown-item">Destination</a>
@@ -62,36 +52,10 @@
                         <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                         <a href="404.html" class="dropdown-item">404 Page</a>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <a href="contact.html" class="nav-link">Contact</a>
-                </li>
-
-                <!-- Register/Login buttons (visible when not logged in) -->
-                <li class="nav-item" id="nav-register-login">
-                    <a href="register.html" class="nav-link">Register</a>
-                    <a href="login.html" class="nav-link">Login</a>
-                </li>
-
-                <!-- Profile picture dropdown (visible when logged in) -->
-                <li class="nav-item dropdown" id="nav-profile" style="display: none;">
-                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="img/default-profile.png" id="nav-profile-img" alt="Profile" class="rounded-circle"
-                            width="30" height="30">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" href="profile.html">View Profile</a></li>
-                        <li><a class="dropdown-item" href="booked-tours.html">View Booked Tours</a></li>
-                        <li><a class="dropdown-item" href="feedback.html">Give Feedback</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#" id="logout">Logout</a></li>
-                    </ul>
-                </li>
-
-            </ul>
+                </div>
+                <a href="contact.html" class="nav-item nav-link">Contact</a>
+            </div>
+            <a href="register.html" class="btn btn-primary rounded-pill py-2 px-4">Register / Login</a>
         </div>
     </nav>
 </div>
