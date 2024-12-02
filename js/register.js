@@ -1,114 +1,182 @@
-const container = document.getElementById('container');
-const registerBtn = document.getElementById('register');
-const loginBtn = document.getElementById('login');
-const signInBtn = document.getElementById('signIn');
-const form = document.querySelector("form"),
-    emailField = form.querySelector(".email-field"),
-    emailInput = emailField.querySelector(".email"),
-    passField = form.querySelector(".create-password"),
-    passInput = passField.querySelector(".password"),
-    cPassField = form.querySelector(".confirm-password"),
-    cPassInput = cPassField.querySelector(".cPassword"),
-    emailError = emailField.querySelector(".error"),
-    passError = passField.querySelector(".error"),
-    cPassError = cPassField.querySelector(".error"), 
-    signInEmail = document.querySelector('.email-login'), 
-    signInPass = document.querySelector('.pass-login');
+// Initialize Firebase (Ensure this is at the top of your register.js)
+const firebaseConfig = {
+    apiKey: "AIzaSyBB_8JRR7pehfVX2lNy_xJWwkSSlKgYghU",
+    authDomain: "sa-project-edu.firebaseapp.com",
+    projectId: "sa-project-edu",
+    storageBucket: "sa-project-edu.firebasestorage.app",
+    messagingSenderId: "360441031760",
+    appId: "1:360441031760:web:74b6f95d885cef9934b555",
+    measurementId: "G-6C2JWVGH4Y"
+};
 
-//set default local storage items
-localStorage.setItem("userEmail", 'ex@ex.com');
-localStorage.setItem("userPassword", '123');
+// Initialize Firebase App
+firebase.initializeApp(firebaseConfig);
 
-localStorage.setItem("x", "false");
-signInBtn.addEventListener('click', () => {
-    clearErrors();
-    
-    const email = signInEmail.value;
-    const password = signInPass.value;
-    
-    const storedEmail = localStorage.getItem("userEmail");
-    const storedPassword = localStorage.getItem("userPassword");
-    
-    if (email === storedEmail && password === storedPassword) {
-        // Sign in successful
-        console.log(localStorage.getItem("userEmail"));
-        console.log(localStorage.getItem("userPassword"));
-        console.log('Sign-in successful');
-        localStorage.setItem("x", "true");
-        // go to home
-        window.location.href = "../../hager-ahmed/HTML/home.html";
-    } else {
-        // Sign in failed
-        console.log(localStorage.getItem("userEmail"));
-        console.log(localStorage.getItem("userPassword"));
-        console.log('Sign-in failed');
-        // Display error message
-        emailError.textContent = 'Invalid email or password';
-        alert('Invalid email or password');
+// Initialize Firebase Authentication and Firestore
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+// JavaScript Validation for Registration Form
+document.getElementById('register-form').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Clear previous error messages
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('emailError').textContent = '';
+    document.getElementById('passwordError').textContent = '';
+    document.getElementById('phoneError').textContent = '';
+    document.getElementById('pictureError').textContent = '';
+    document.getElementById('termsError').textContent = '';
+
+    // Get form values
+    const name = document.getElementById('registerName').value.trim();
+    const email = document.getElementById('registerEmail').value.trim();
+    const password = document.getElementById('registerPassword').value;
+    const phone = document.getElementById('registerPhone').value.trim();
+    const profilePicture = document.getElementById('profilePicture').files[0];
+    const termsChecked = document.getElementById('termsCheck').checked;
+
+    // Regular expressions for validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{1,11}$/;
+
+    let isValid = true;
+
+    // Name Validation
+    if (name.length < 4) {
+        isValid = false;
+        document.getElementById('nameError').textContent = 'Name must be at least 4 characters long.';
+    }
+
+    // Email Validation
+    if (!emailRegex.test(email)) {
+        isValid = false;
+        document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+    }
+
+    // Password Validation
+    if (password.length < 8) {
+        isValid = false;
+        document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
+    }
+
+    // Phone Number Validation
+    if (!phoneRegex.test(phone)) {
+        isValid = false;
+        document.getElementById('phoneError').textContent = 'Please enter a valid phone number (up to 11 digits).';
+    }
+
+    // Profile Picture Validation
+    if (!profilePicture) {
+        isValid = false;
+        document.getElementById('pictureError').textContent = 'Please upload a profile picture.';
+    }
+
+    // Terms and Conditions Validation
+    if (!termsChecked) {
+        isValid = false;
+        document.getElementById('termsError').textContent = 'You must agree to the Privacy Terms.';
+    }
+
+    if (!isValid) {
+        // Scroll to the top of the form to show errors
+        this.scrollIntoView({ behavior: 'smooth' });
+        return;
+    }
+
+    try {
+        // Show a loading indicator or disable the register button if desired
+
+        // Create user with Firebase Authentication
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        // Upload profile picture to Firebase Storage
+        const storageRefPath = `profilePictures/${user.uid}/${profilePicture.name}`;
+        const storageRef = storage.ref(storageRefPath);
+        const uploadTaskSnapshot = await storageRef.put(profilePicture);
+        const profilePictureURL = await uploadTaskSnapshot.ref.getDownloadURL();
+
+        // Create user data object
+        const userData = {
+            name: name,
+            email: email,
+            phone: phone,
+            profilePictureURL: profilePictureURL,
+            coupons: [], // Initialize with an empty array or default coupons
+            registeredTours: [] // Initialize with an empty array
+        };
+
+        // Store user data in Firestore under 'users' collection
+        await db.collection('users').doc(user.uid).set(userData);
+
+        // Optionally, send email verification
+        await user.sendEmailVerification();
+
+        // Notify the user of successful registration
+        alert('Registration successful! Please check your email to verify your account.');
+
+        // !Redirect the user or reset the form
+        window.location.href = 'index.html'; // Redirect to login page
+    } catch (error) {
+        console.error('Error during registration:', error);
+        alert('Registration failed: ' + error.message);
     }
 });
 
-registerBtn.addEventListener('click', () => {
-    container.classList.add("active");
-});
+// JavaScript Validation for Login Form
+document.getElementById('login-form').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent form submission
 
-loginBtn.addEventListener('click', () => {
-    container.classList.remove("active");
-});
+    // Clear previous error messages
+    document.getElementById('loginEmailError').textContent = '';
+    document.getElementById('loginPasswordError').textContent = '';
 
-// Email Validation
-function checkEmail() {
-    const emaiPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-    if (!emailInput.value.match(emaiPattern)) {
-        return emailField.classList.add("invalid"), emailError.textContent = "Please enter a valid email address.";
+    // Get form values
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+
+    // Regular expression for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    let isValid = true;
+
+    // Email Validation
+    if (!emailRegex.test(email)) {
+        isValid = false;
+        document.getElementById('loginEmailError').textContent = 'Please enter a valid email address.';
     }
-    emailField.classList.remove("invalid"), emailError.textContent = "";
-}
 
-// Password Validation
-function createPass() {
-    const passPattern =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    if (!passInput.value.match(passPattern)) {
-        return passField.classList.add("invalid"), passError.textContent = "Invalid, enter a valid password.";
+    // Password Validation
+    if (password.length === 0) {
+        isValid = false;
+        document.getElementById('loginPasswordError').textContent = 'Please enter your password.';
     }
-    passField.classList.remove("invalid"), passError.textContent = "";
-}
 
-// Confirm Password Validtion
-function confirmPass() {
-    if (passInput.value !== cPassInput.value || cPassInput.value === "") {
-        return cPassField.classList.add("invalid"), cPassError.textContent = "Passwords do not match.";
+    if (!isValid) {
+        // Scroll to the top of the form to show errors
+        this.scrollIntoView({ behavior: 'smooth' });
+        return;
     }
-    cPassField.classList.remove("invalid"), cPassError.textContent = "";
-}
 
-registerBtn.addEventListener('click', () => {
-    container.classList.add("active");
-});
+    try {
+        // Show a loading indicator or disable the login button if desired
 
-loginBtn.addEventListener('click', () => {
-    container.classList.remove("active");
-});
+        // Sign in with Firebase Authentication
+        await auth.signInWithEmailAndPassword(email, password);
 
-const signUpButton = document.querySelector('.signup-button');
-// Register functionality
-signUpButton.addEventListener('click', () => {
-    const email = emailInput.value;
-    const password = passInput.value;
-    if (!checkEmail() && !createPass() && !confirmPass()){
-        // ! Store user credentials in local storage
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userPassword", password);
-        alert('User Registered Successfully. Please login.');
-        signInEmail.placeholder = email;
-        signInPass.placeholder = password;
+        // Optionally, check if email is verified
+        const user = auth.currentUser;
+        if (user && !user.emailVerified) {
+            alert('Please verify your email before logging in.');
+            return;
+        }
+
+        // Redirect the user to the dashboard or home page
+        window.location.href = 'dashboard.html'; // Replace with your desired route
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('Login failed: ' + error.message);
     }
 });
-
-function clearErrors() {
-    emailError.textContent = '';
-    passError.textContent = '';
-    cPassError.textContent = '';
-}
