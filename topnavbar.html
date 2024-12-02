@@ -87,6 +87,7 @@
 
         // Handle Logout
         logoutBtn.addEventListener('click', async function () {
+            console.log('Logout button clicked.', localStorage.getItem('isLoggedIn'));
             // Log out from Firebase if used
             if (firebase && firebase.auth) {
                 try {
