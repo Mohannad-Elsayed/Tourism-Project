@@ -92,20 +92,25 @@
     
 })(jQuery);
 
-//! delete if not working properly
-localStorage.setItem('isLoggedIn', 'false');
 
-// Firebase initialization (if not already initialized)
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "sa-project-edu.firebaseapp.com",
-    projectId: "sa-project-edu",
-    storageBucket: "sa-project-edu.appspot.com",
-    messagingSenderId: "360441031760",
-    appId: "1:360441031760:web:74b6f95d885cef9934b555",
-    measurementId: "G-6C2JWVGH4Y"
-};
-firebase.initializeApp(firebaseConfig);
+
+//! delete if not working properly
+// localStorage.setItem('isLoggedIn', 'false');
+
+// // Firebase initialization (if not already initialized)
+// const firebaseConfig = {
+//     apiKey: "YOUR_API_KEY",
+//     authDomain: "sa-project-edu.firebaseapp.com",
+//     projectId: "sa-project-edu",
+//     storageBucket: "sa-project-edu.appspot.com",
+//     messagingSenderId: "360441031760",
+//     appId: "1:360441031760:web:74b6f95d885cef9934b555",
+//     measurementId: "G-6C2JWVGH4Y"
+// };
+// firebase.initializeApp(firebaseConfig);
+
+
+
 
 // Check login status and update navbar buttons
 document.addEventListener('DOMContentLoaded', function () {
