@@ -193,24 +193,83 @@
     </div>
     <!-- Hero End -->
 
+
     <!-- Main Content Start -->
-    <div class="container-auth">
-        <div class="form-container">
-            <h1>Create Account</h1>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-google"></i></a>
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your email for registration:</span>
-            <form id="register-form">
-                <input type="text" id="username" placeholder="Name" required>
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit">Sign Up</button>
+    <!-- !You can add the login form here, following the same structure -->
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>Create Account</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <div class="field email-field">
+                    <div class="input-field">
+                        <input type="email" placeholder="Enter your email" class="email" />
+                    </div>
+                    <span class="error email-error">
+                        <i class="bx bx-error-circle error-icon"></i>
+                        <p class="error-text">Please enter a valid email</p>
+                    </span>
+                </div>
+                <div class="field create-password">
+                    <div class="input-field">
+                        <input type="password" placeholder="Create password" class="password" />
+                        <i class="bx bx-hide show-hide"></i>
+                    </div>
+                    <span class="error password-error">
+                        <i class="bx bx-error-circle error-icon"></i>
+                        <p class="error-text">
+                            Please enter atleast 8 charatcer with number, symbol, small and
+                            capital letter.
+                        </p>
+                    </span>
+                </div>
+                <div class="field confirm-password">
+                    <div class="input-field">
+                        <input type="password" placeholder="Confirm password" class="cPassword" />
+                        <i class="bx bx-hide show-hide"></i>
+                    </div>
+                    <span class="error cPassword-error">
+                        <i class="bx bx-error-circle error-icon"></i>
+                        <p class="error-text">Password don't match</p>
+                    </span>
+                </div>
+                <input type="button" class="signup-button" value="Sign Up" style="cursor: pointer;">
             </form>
         </div>
-        <!-- !You can add the login form here, following the same structure -->
+        <div class="form-container sign-in">
+            <form>
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email password</span>
+                <input type="email" placeholder="Email [Try: ex@ex.com]" class="email-login">
+                <input type="password" placeholder="Password [Try: 123]" class="pass-login">
+                <a href="#">Forget Your Password?</a>
+                <input type="button" value="Sign In" id="signIn" style="cursor: pointer;">
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     <!-- Main Content End -->
 
