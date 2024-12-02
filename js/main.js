@@ -92,59 +92,48 @@
     
 })(jQuery);
 
+localStorage.setItem('isLoggedIn', 'false');
 
-
-//! delete if not working properly
-// localStorage.setItem('isLoggedIn', 'false');
-
-// // Firebase initialization (if not already initialized)
-// const firebaseConfig = {
-//     apiKey: "YOUR_API_KEY",
-//     authDomain: "sa-project-edu.firebaseapp.com",
-//     projectId: "sa-project-edu",
-//     storageBucket: "sa-project-edu.appspot.com",
-//     messagingSenderId: "360441031760",
-//     appId: "1:360441031760:web:74b6f95d885cef9934b555",
-//     measurementId: "G-6C2JWVGH4Y"
-// };
-// firebase.initializeApp(firebaseConfig);
-
-
-
-
-// Check login status and update navbar buttons
 document.addEventListener('DOMContentLoaded', function () {
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
     const registerLoginBtn = document.getElementById('registerLoginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    // if (isLoggedIn) {
-    //     registerLoginBtn.style.display = 'none';
-    //     logoutBtn.style.display = 'inline-block';
-    // } else {
-    //     registerLoginBtn.style.display = 'inline-block';
-    //     logoutBtn.style.display = 'none';
-    // }
+    // Function to update the button visibility
+    function updateNavbar() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-    // Logout button click handler
-    logoutBtn.addEventListener('click', function () {
-        // Clear login status
-        localStorage.setItem('isLoggedIn', 'false');
-        // Optionally sign out from Firebase Auth if used
-        if (firebase && firebase.auth) {
-            firebase.auth().signOut().then(function () {
-                console.log('User signed out.');
-                window.location.href = 'index.html'; // Redirect to homepage
-            }).catch(function (error) {
-                console.error('Sign out error:', error);
-            });
+        if (isLoggedIn) {
+            registerLoginBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
         } else {
-            // If not using Firebase Auth, simply redirect
-            window.location.href = 'index.html'; // Redirect to homepage
+            registerLoginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+        }
+    }
+
+    // Initial button state
+    updateNavbar();
+
+    // Handle Logout
+    logoutBtn.addEventListener('click', async function () {
+        // Log out from Firebase if used
+        if (firebase && firebase.auth) {
+            try {
+                await firebase.auth().signOut();
+                console.log('User signed out.');
+            } catch (error) {
+                console.error('Sign out error:', error);
+                return; // Exit early if sign-out fails
+            }
         }
 
-        // Update button visibility
-        // registerLoginBtn.style.display = 'inline-block';
-        // logoutBtn.style.display = 'none';
+        // Clear login status
+        localStorage.setItem('isLoggedIn', 'false');
+
+        // Update UI
+        updateNavbar();
+
+        // Redirect user after logout
+        window.location.href = 'index.html';
     });
 });
