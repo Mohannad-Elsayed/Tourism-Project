@@ -40,6 +40,16 @@
                     console.error('Error fetching topnavbar:', error);
                 });
         });
+        const registerLoginBtn = document.getElementById('registerLoginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        if (isLoggedIn) {
+            registerLoginBtn.style.display = 'none';
+            logoutBtn.style.display = 'inline-block';
+        } else {
+            registerLoginBtn.style.display = 'inline-block';
+            logoutBtn.style.display = 'none';
+        }
     </script>
     <!-- Topbar + Navbar End -->
 

@@ -118,13 +118,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const registerLoginBtn = document.getElementById('registerLoginBtn');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    if (isLoggedIn) {
-        registerLoginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-    } else {
-        registerLoginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-    }
+    // if (isLoggedIn) {
+    //     registerLoginBtn.style.display = 'none';
+    //     logoutBtn.style.display = 'inline-block';
+    // } else {
+    //     registerLoginBtn.style.display = 'inline-block';
+    //     logoutBtn.style.display = 'none';
+    // }
 
     // Logout button click handler
     logoutBtn.addEventListener('click', function () {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Update button visibility
-        registerLoginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
+        // registerLoginBtn.style.display = 'inline-block';
+        // logoutBtn.style.display = 'none';
     });
 });
