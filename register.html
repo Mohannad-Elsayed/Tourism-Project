@@ -5,14 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <script>
-        fetch('head.html')
-            .then(response => response.text())
-            .then(data => {
-                document.head.innerHTML += data;
-            });
-    </script>
-    <title>Register</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
@@ -360,153 +352,86 @@
             transform: translateX(200%);
         }
     </style>
+    <title>Login Page</title>
 </head>
 
 <body>
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form>
+                <h1>Create Account</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <div class="field email-field">
+                    <div class="input-field">
+                        <input type="email" placeholder="Enter your email" class="email" />
+                    </div>
+                    <span class="error email-error">
+                        <i class="bx bx-error-circle error-icon"></i>
+                        <p class="error-text">Please enter a valid email</p>
+                    </span>
+                </div>
+                <div class="field create-password">
+                    <div class="input-field">
+                        <input type="password" placeholder="Create password" class="password" />
+                        <i class="bx bx-hide show-hide"></i>
+                    </div>
+                    <span class="error password-error">
+                        <i class="bx bx-error-circle error-icon"></i>
+                        <p class="error-text">
+                            Please enter atleast 8 charatcer with number, symbol, small and
+                            capital letter.
+                        </p>
+                    </span>
+                </div>
+                <div class="field confirm-password">
+                    <div class="input-field">
+                        <input type="password" placeholder="Confirm password" class="cPassword" />
+                        <i class="bx bx-hide show-hide"></i>
+                    </div>
+                    <span class="error cPassword-error">
+                        <i class="bx bx-error-circle error-icon"></i>
+                        <p class="error-text">Password don't match</p>
+                    </span>
+                </div>
+                <input type="button" class="signup-button" value="Sign Up" style="cursor: pointer;">
+            </form>
         </div>
-    </div>
-    <!-- Spinner End -->
-
-    <!-- Topbar + Navbar Start -->
-    <div id="topnavbar"></div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('topnavbar.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('topnavbar').innerHTML = data;
-                });
-        });
-    </script>
-    <!-- Topbar + Navbar End -->
-
-    <!-- Hero Start -->
-    <div class="container-fluid bg-primary py-5 mb-5 hero-header">
-        <div class="container py-5">
-            <div class="row justify-content-center py-5">
-                <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
-                    <h1 class="display-3 text-white animated slideInDown">Register/Login</h1>
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item text-white active" aria-current="page">Register</li>
-                        </ol>
-                    </nav>
+        <div class="form-container sign-in">
+            <form>
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fab fa-google"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email password</span>
+                <input type="email" placeholder="Email [Try: ex@ex.com]" class="email-login">
+                <input type="password" placeholder="Password [Try: 123]" class="pass-login">
+                <a href="#">Forget Your Password?</a>
+                <input type="button" value="Sign In" id="signIn" style="cursor: pointer;">
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Hero End -->
 
-    <!-- Auth Container Start -->
-    <div class="container-auth" id="container">
-        <div class="container" id="container">
-            <div class="form-container sign-up">
-                <form>
-                    <h1>Create Account</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon"><i class="fab fa-google"></i></a>
-                        <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                    <div class="field email-field">
-                        <div class="input-field">
-                            <input type="email" placeholder="Enter your email" class="email" />
-                        </div>
-                        <span class="error email-error">
-                            <i class="bx bx-error-circle error-icon"></i>
-                            <p class="error-text">Please enter a valid email</p>
-                        </span>
-                    </div>
-                    <div class="field create-password">
-                        <div class="input-field">
-                            <input type="password" placeholder="Create password" class="password" />
-                            <i class="bx bx-hide show-hide"></i>
-                        </div>
-                        <span class="error password-error">
-                            <i class="bx bx-error-circle error-icon"></i>
-                            <p class="error-text">
-                                Please enter atleast 8 charatcer with number, symbol, small and
-                                capital letter.
-                            </p>
-                        </span>
-                    </div>
-                    <div class="field confirm-password">
-                        <div class="input-field">
-                            <input type="password" placeholder="Confirm password" class="cPassword" />
-                            <i class="bx bx-hide show-hide"></i>
-                        </div>
-                        <span class="error cPassword-error">
-                            <i class="bx bx-error-circle error-icon"></i>
-                            <p class="error-text">Password don't match</p>
-                        </span>
-                    </div>
-                    <input type="button" class="signup-button" value="Sign Up" style="cursor: pointer;">
-                </form>
-            </div>
-            <div class="form-container sign-in">
-                <form>
-                    <h1>Sign In</h1>
-                    <div class="social-icons">
-                        <a href="#" class="icon"><i class="fab fa-google"></i></a>
-                        <a href="#" class="icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="icon"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                    <span>or use your email password</span>
-                    <input type="email" placeholder="Email [Try: ex@ex.com]" class="email-login">
-                    <input type="password" placeholder="Password [Try: 123]" class="pass-login">
-                    <a href="#">Forget Your Password?</a>
-                    <input type="button" value="Sign In" id="signIn" style="cursor: pointer;">
-                </form>
-            </div>
-            <div class="toggle-container">
-                <div class="toggle">
-                    <div class="toggle-panel toggle-left">
-                        <h1>Welcome Back!</h1>
-                        <p>Enter your personal details to use all of site features</p>
-                        <button class="hidden" id="login">Sign In</button>
-                    </div>
-                    <div class="toggle-panel toggle-right">
-                        <h1>Hello, Friend!</h1>
-                        <p>Register with your personal details to use all of site features</p>
-                        <button class="hidden" id="register">Sign Up</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Auth Container End -->
-
-    <!-- Footer Start -->
-    <div id="footer"></div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('footer.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('footer').innerHTML = data;
-                });
-        });
-    </script>
-    <!-- Footer End -->
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
     <script>
         const container = document.getElementById('container');
         const registerBtn = document.getElementById('register');
@@ -623,7 +548,6 @@
             cPassError.textContent = '';
         }
     </script>
-
 </body>
 
 </html>
