@@ -23,12 +23,23 @@
 
 
     <!-- Topbar + Navbar Start -->
+    <div id="topnavbar"></div>
     <script>
-        fetch('topnavbar.html')
-            .then(response => response.text())
-            .then(data => {
-                document.body.innerHTML += data;
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('topnavbar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('topnavbar').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching topnavbar:', error);
+                });
+        });
     </script>
     <!-- Topbar + Navbar End -->
 
@@ -52,12 +63,23 @@
 
 
     <!-- Footer Start -->
+    <div id="footer"></div>
     <script>
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.body.innerHTML += data;
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('footer.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('footer').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching footer:', error);
+                });
+        });
     </script>
     <!-- Footer End -->
 
