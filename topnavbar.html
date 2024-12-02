@@ -71,6 +71,7 @@
         // Function to update the button visibility
         function updateNavbar() {
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            console.log('User is logged in:', isLoggedIn);
 
             if (isLoggedIn) {
                 registerLoginBtn.style.display = 'none';

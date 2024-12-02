@@ -92,5 +92,6 @@
     
 })(jQuery);
 
-localStorage.setItem('isLoggedIn', 'false');
-
+if (localStorage.getItem('isLoggedIn') !== 'true') {
+    localStorage.setItem('isLoggedIn', 'false');
+}
