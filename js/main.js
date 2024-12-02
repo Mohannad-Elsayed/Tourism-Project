@@ -92,6 +92,7 @@
     
 })(jQuery);
 
+console.log('in:main.js :: isLoggedIn:', localStorage.getItem('isLoggedIn'));
 if (localStorage.getItem('isLoggedIn') !== 'true') {
     localStorage.setItem('isLoggedIn', 'false');
 }
