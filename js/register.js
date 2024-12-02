@@ -190,8 +190,8 @@ document.getElementById('login-form').addEventListener('submit', async function(
         localStorage.setItem('isLoggedIn', 'true');
 
         // Redirect the user to the homepage or dashboard
-        window.location.href = '/'; // Redirect to home page
         console.log('User logged in successfully.', localStorage.getItem('isLoggedIn'));
+        window.location.href = '/'; // Redirect to home page
     } catch (error) {
         console.error('Error during login:', error);
         alert('Login failed: ' + error.message);
