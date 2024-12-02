@@ -90,5 +90,50 @@
         }
     });
     
-})(jQuery);
+    // Initialize Firebase
+    const firebaseConfig = {
+      // Your Firebase configuration
+    };
+    firebase.initializeApp(firebaseConfig);
 
+    // Initialize Firestore
+    const db = firebase.firestore();
+
+    // Update Nav-Bar Based on Auth State
+    firebase.auth().onAuthStateChanged(async function(user) {
+      if (user) {
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          const userData = userDoc.data();
+          const profilePictureURL = userData.profilePictureURL || 'img/default-profile.png';
+          updateNavBarForLoggedInUser(profilePictureURL);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          updateNavBarForLoggedInUser('img/default-profile.png');
+        }
+      } else {
+        updateNavBarForLoggedOutUser();
+      }
+    });
+
+    function updateNavBarForLoggedInUser(profilePictureURL) {
+      document.getElementById('nav-register-login').style.display = 'none';
+      document.getElementById('nav-profile').style.display = 'block';
+      document.getElementById('nav-profile-img').src = profilePictureURL;
+    }
+
+    function updateNavBarForLoggedOutUser() {
+      document.getElementById('nav-register-login').style.display = 'block';
+      document.getElementById('nav-profile').style.display = 'none';
+    }
+
+    document.getElementById('logout').addEventListener('click', function(e) {
+      e.preventDefault();
+      firebase.auth().signOut().then(function() {
+        window.location.href = 'index.html';
+      }).catch(function(error) {
+        console.error('Sign Out Error:', error);
+      });
+    });
+
+})(jQuery);

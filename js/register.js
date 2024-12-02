@@ -129,10 +129,10 @@ document.getElementById('register-form').addEventListener('submit', async functi
         await user.sendEmailVerification();
 
         // Notify the user of successful registration
-        alert('Registration successful! Please check your email to verify your account.');
+        alert('Registration successful! Please check your email to verify your account and then login.');
 
         // !Redirect the user or reset the form
-        window.location.href = 'index.html'; // Redirect to login page
+        window.location.href = 'register.html'; // Redirect to login page
     } catch (error) {
         console.error('Error during registration:', error);
         alert('Registration failed: ' + error.message);
@@ -188,7 +188,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
         }
 
         // Redirect the user to the dashboard or home page
-        window.location.href = 'dashboard.html'; // Replace with your desired route
+        window.location.href = 'index.html'; // Replace with your desired route
     } catch (error) {
         console.error('Error during login:', error);
         alert('Login failed: ' + error.message);
