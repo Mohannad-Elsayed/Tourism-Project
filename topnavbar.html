@@ -74,6 +74,7 @@
             const linkPage = link.getAttribute('href');
 
             // Check if the link's href matches the current page
+            console.log(linkPage, currentPage);
             if (linkPage === currentPage) {
                 link.classList.add('active');
             }
