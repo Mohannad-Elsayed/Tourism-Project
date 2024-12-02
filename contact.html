@@ -2,7 +2,13 @@
 <html lang="en">
 
 <head>
-    <link rel="import" href="head.html">
+    <script>
+        fetch('head.html')
+            .then(response => response.text())
+            .then(data => {
+                document.head.innerHTML += data;
+            });
+    </script>
 </head>
 
 <body>
