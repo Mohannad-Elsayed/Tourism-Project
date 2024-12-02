@@ -27,7 +27,7 @@
         fetch('topnavbar.html')
             .then(response => response.text())
             .then(data => {
-                document.head.innerHTML += data;
+                document.body.innerHTML += data;
             });
     </script>
     <!-- Topbar + Navbar End -->
@@ -56,7 +56,7 @@
         fetch('footer.html')
             .then(response => response.text())
             .then(data => {
-                document.head.innerHTML += data;
+                document.body.innerHTML += data;
             });
     </script>
     <!-- Footer End -->
