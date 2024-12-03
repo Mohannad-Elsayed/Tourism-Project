@@ -1,22 +1,3 @@
-// // Initialize Firebase (Ensure this is at the top of your register.js)
-// const firebaseConfig = {
-//     apiKey: "AIzaSyBB_8JRR7pehfVX2lNy_xJWwkSSlKgYghU",
-//     authDomain: "sa-project-edu.firebaseapp.com",
-//     projectId: "sa-project-edu",
-//     // Remove or comment out storageBucket if not using Firebase Storage
-//     // storageBucket: "sa-project-edu.appspot.com",
-//     messagingSenderId: "360441031760",
-//     appId: "1:360441031760:web:74b6f95d885cef9934b555",
-//     measurementId: "G-6C2JWVGH4Y"
-// };
-
-// // Initialize Firebase App
-// firebase.initializeApp(firebaseConfig);
-
-// // Initialize Firebase Authentication and Firestore
-// const auth = firebase.auth();
-// const db = firebase.firestore();
-
 // JavaScript Validation for Registration Form
 document.getElementById('register-form').addEventListener('submit', async function (event) {
     event.preventDefault(); // Prevent form submission
