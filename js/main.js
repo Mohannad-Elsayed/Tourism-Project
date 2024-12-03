@@ -89,6 +89,57 @@
             }
         }
     });
+
+    // Define updateNavbar function
+    function updateNavbar() {
+        const registerLoginBtn = document.getElementById('registerLoginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        if (registerLoginBtn && logoutBtn) {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            console.log('User is logged in:', isLoggedIn);
+
+            if (isLoggedIn) {
+                registerLoginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                registerLoginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+            }
+
+            // Handle Logout
+            logoutBtn.addEventListener('click', async function () {
+                console.log('Logout button clicked.', localStorage.getItem('isLoggedIn'));
+                // Log out from Firebase if used
+                if (firebase && firebase.auth) {
+                    try {
+                        await firebase.auth().signOut();
+                        console.log('User signed out.');
+                    } catch (error) {
+                        console.error('Sign out error:', error);
+                        return; // Exit early if sign-out fails
+                    }
+                }
+
+                // Clear login status
+                localStorage.setItem('isLoggedIn', 'false');
+
+                // Update UI
+                updateNavbar();
+            });
+
+        } else {
+            console.error('Register/Login or Logout button not found in the DOM.');
+        }
+    }
+
+    // Expose updateNavbar to the global scope
+    window.updateNavbar = updateNavbar;
+
+    // Initial call to updateNavbar (if navbar is already loaded)
+    document.addEventListener('DOMContentLoaded', function () {
+        updateNavbar();
+    });
     
 })(jQuery);
 
@@ -98,47 +149,5 @@ if (localStorage.getItem('isLoggedIn') === null) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const registerLoginBtn = document.getElementById('registerLoginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    // Function to update the button visibility
-    function updateNavbar() {
-        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-        console.log('User is logged in:', isLoggedIn);
-
-        if (isLoggedIn) {
-            registerLoginBtn.style.display = 'none';
-            logoutBtn.style.display = 'inline-block';
-        } else {
-            registerLoginBtn.style.display = 'inline-block';
-            logoutBtn.style.display = 'none';
-        }
-    }
-
-    // Initial button state
     updateNavbar();
-
-    // Handle Logout
-    logoutBtn.addEventListener('click', async function () {
-        console.log('Logout button clicked.', localStorage.getItem('isLoggedIn'));
-        // Log out from Firebase if used
-        if (firebase && firebase.auth) {
-            try {
-                await firebase.auth().signOut();
-                console.log('User signed out.');
-            } catch (error) {
-                console.error('Sign out error:', error);
-                return; // Exit early if sign-out fails
-            }
-        }
-
-        // Clear login status
-        localStorage.setItem('isLoggedIn', 'false');
-
-        // Update UI
-        updateNavbar();
-
-        // Redirect user after logout
-        window.location.href = 'index.html';
-    });
 });
