@@ -15,7 +15,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
     const email = document.getElementById('registerEmail').value.trim();
     const password = document.getElementById('registerPassword').value;
     const phone = document.getElementById('registerPhone').value.trim();
-    const profilePicture = document.getElementById('profilePicture').files[0];
+    const profilePicture = document.getElementById('profilePictureInput').files[0];
     const termsChecked = document.getElementById('termsCheck').checked;
 
     // Regular expressions for validation
@@ -100,7 +100,8 @@ document.getElementById('register-form').addEventListener('submit', async functi
             phone: phone,
             profilePictureURL: profilePictureURL,
             coupons: [], // Initialize with an empty array or default coupons
-            registeredTours: [] // Initialize with an empty array
+            registeredTours: [], // Initialize with an empty array
+            access: 'tourist' 
         };
 
         // Store user data in Firestore under 'users' collection

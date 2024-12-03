@@ -9,7 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(doc => {
                     if (doc.exists) {
                         const userData = doc.data();
+                        const accessLevel = userData.access; // Fetch the 'access' field
                         displayUserInfo(userData, user.email);
+                        displayDashboardBasedOnAccess(accessLevel);
                     } else {
                         console.error('No user data found!');
                     }
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
 
         // Clear previous error messages
-        ['usernameError', 'fullnameError', 'addressError', 'stateError', 'numberError'].forEach(id => {
+        ['usernameError', 'fullnameError', 'addressError', 'stateError', 'numberError', 'pictureError'].forEach(id => {
             document.getElementById(id).textContent = '';
         });
 
@@ -72,11 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            let profilePicture = document.getElementById('profilePictureInput').files[0];
-            var profilePictureURL = document.getElementById('profilePictureInput').src;
-            console.log(profilePictureURL);
-            // If a new profile picture is selected, upload it
-            if (profilePictureFile) {
+            const userId = auth.currentUser.uid;
+            let profilePictureURL;
+
+            // Fetch current profile picture URL
+            const doc = await db.collection('users').doc(userId).get();
+            if (doc.exists) {
+                const usrdata = doc.data();
+                profilePictureURL = usrdata.profilePictureURL;
+            }
+
+            // Upload new profile picture if provided
+            if (profilePicture) {
                 const formData = new FormData();
                 formData.append('file', profilePicture);
                 formData.append('upload_preset', 'saprojectedu'); // Replace with your upload preset
@@ -98,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Update user data in Firestore
-            const userId = auth.currentUser.uid;
             await db.collection('users').doc(userId).update({
                 username: username,
                 fullname: fullname,
@@ -109,21 +117,23 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             alert('Profile updated successfully!');
-            // Optionally, refresh the user info
-            db.collection('users').doc(userId).get()
-                .then(doc => {
-                    if (doc.exists) {
-                        const updatedData = doc.data();
-                        displayUserInfo(updatedData, email);
-                    }
-                });
+
+            // Fetch updated user data and display it
+            const updatedDoc = await db.collection('users').doc(userId).get();
+            if (updatedDoc.exists) {
+                const updatedData = updatedDoc.data();
+                displayUserInfo(updatedData, email);
+            }
         } catch (error) {
             console.error('Error updating profile:', error);
             alert('Failed to update profile. Please try again.');
         }
     });
+
+    // Additional functions can be added here, such as handling booked tours and feedback
 });
 
+// Function to display user info
 function displayUserInfo(userData, email) {
     const userInfoDiv = document.getElementById('user-info');
     userInfoDiv.querySelector('#profilePicture').src = userData.profilePictureURL || 'default-profile.png';
@@ -135,54 +145,104 @@ function displayUserInfo(userData, email) {
     userInfoDiv.querySelector('#email').value = email || '';
 }
 
-function fetchBookedTours(userId) {
-    db.collection('bookings').where('userId', '==', userId)
-        .get()
-        .then(querySnapshot => {
-            if (querySnapshot.empty) {
-                document.getElementById('tours-container').innerHTML = '<p>You have no booked tours.</p>';
-                return;
-            }
+// Function to display dashboard based on access level
+function displayDashboardBasedOnAccess(accessLevel) {
+    const touristDashboard = document.getElementById('tourist-dashboard');
+    const guideDashboard = document.getElementById('guide-dashboard');
 
+    if (accessLevel === 'tourist') {
+        touristDashboard.style.display = 'block';
+        guideDashboard.style.display = 'none';
+        // Load booked tours and feedback sections
+        loadBookedTours();
+        loadFeedbackSection();
+    } else if (accessLevel === 'guide') {
+        touristDashboard.style.display = 'none';
+        guideDashboard.style.display = 'block';
+        // Load active tours section
+        loadActiveTours();
+    } else {
+        // If access level is undefined or unrecognized
+        touristDashboard.style.display = 'none';
+        guideDashboard.style.display = 'none';
+        console.warn('Unrecognized access level:', accessLevel);
+    }
+}
+
+// Function to load booked tours for tourists
+function loadBookedTours() {
+    const toursContainer = document.getElementById('tours-container');
+    const userId = auth.currentUser.uid;
+
+    db.collection('bookings').where('userId', '==', userId).get()
+        .then(querySnapshot => {
+            toursContainer.innerHTML = ''; // Clear existing content
             querySnapshot.forEach(doc => {
-                const booking = doc.data();
-                // Fetch tour details
-                db.collection('tours').doc(booking.tourId).get()
-                    .then(tourDoc => {
-                        if (tourDoc.exists) {
-                            const tourData = tourDoc.data();
-                            displayTourCard(tourData);
-                        } else {
-                            console.error('Tour not found');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching tour:', error);
-                    });
+                const tour = doc.data();
+                const tourCard = createTourCard(tour);
+                toursContainer.appendChild(tourCard);
             });
         })
         .catch(error => {
-            console.error('Error fetching bookings:', error);
+            console.error('Error fetching booked tours:', error);
         });
 }
 
-function displayTourCard(tour) {
-    const toursContainer = document.getElementById('tours-container');
-    const tourCard = document.createElement('div');
-    tourCard.classList.add('col-md-4');
+// Function to load active tours for guides
+function loadActiveTours() {
+    const activeToursContainer = document.getElementById('active-tours-container');
+    const userId = auth.currentUser.uid;
 
-    tourCard.innerHTML = `
-    <div class="card mb-4">
-        <img src="${tour.photoURL}" class="card-img-top" alt="${tour.name}">
-        <div class="card-body">
-            <h5 class="card-title">${tour.name}</h5>
-            <p class="card-text">${tour.description}</p>
-            <p class="card-text"><strong>Price:</strong> $${tour.price}</p>
-        </div>
-    </div>
-`;
+    db.collection('tours').where('guideId', '==', userId).where('status', '==', 'active').get()
+        .then(querySnapshot => {
+            activeToursContainer.innerHTML = ''; // Clear existing content
+            querySnapshot.forEach(doc => {
+                const tour = doc.data();
+                const tourCard = createTourCard(tour);
+                activeToursContainer.appendChild(tourCard);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching active tours:', error);
+        });
+}
 
-    toursContainer.appendChild(tourCard);
+// Function to create a tour card (used for both booked and active tours)
+function createTourCard(tour) {
+    const col = document.createElement('div');
+    col.className = 'col-lg-4 col-md-6 mb-4';
+
+    const card = document.createElement('div');
+    card.className = 'card h-100';
+
+    const img = document.createElement('img');
+    img.className = 'card-img-top';
+    img.src = tour.imageURL || 'default-tour.jpg';
+    img.alt = tour.name;
+    card.appendChild(img);
+
+    const cardBody = document.createElement('div');
+    cardBody.className = 'card-body';
+
+    const cardTitle = document.createElement('h5');
+    cardTitle.className = 'card-title';
+    cardTitle.textContent = tour.name;
+    cardBody.appendChild(cardTitle);
+
+    const cardText = document.createElement('p');
+    cardText.className = 'card-text';
+    cardText.textContent = tour.description || 'No description available.';
+    cardBody.appendChild(cardText);
+
+    card.appendChild(cardBody);
+
+    return col.appendChild(card);
+}
+
+// Function to load feedback section for tourists
+function loadFeedbackSection() {
+    // Implement feedback loading if necessary
+    // For example, fetching previous feedback or setting up feedback form handlers
 }
 
 // Call fetchBookedTours after fetching user info
