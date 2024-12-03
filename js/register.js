@@ -389,7 +389,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
         // Redirect the user to the homepage or dashboard
         console.log('User logged in successfully.', localStorage.getItem('isLoggedIn'));
         
-        window.location.href = '/'; // Redirect to home page
+        window.location.href = 'dashboard.html'; // Redirect to home page
         
     } catch (error) {
         console.error('Error during login:', error);

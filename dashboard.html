@@ -142,7 +142,7 @@
     <!-- Main Content -->
     <div class="container py-5">
         <!-- Tourist Dashboard Section -->
-        <div id="tourist-dashboard" class="mb-5" style="display: block;">
+        <div id="tourist-dashboard" class="mb-5" style="display: none;">
             <!-- User Info Section -->
             <h2>Your Profile</h2>
             <div id="user-info" class="mb-5 d-flex justify-content-center">
@@ -224,6 +224,112 @@
             <h2>Active Tours</h2>
             <div class="row" id="active-tours-container">
                 <!-- Active tour cards will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Admin Dashboard Section -->
+        <div id="admin-dashboard" class="mb-5" style="display: none;">
+            <u>
+                <h2>Admin Dashboard</h2>
+            </u>
+            <br>
+            <!-- Add Tour Form -->
+            <h3>Add a New Tour</h3>
+            <form id="add-tour-form" novalidate>
+                <div class="mb-3">
+                    <label for="tourId" class="form-label">Tour ID</label>
+                    <input type="text" class="form-control" id="tourId" required>
+                    <div class="error-message text-danger" id="tourIdError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="tourNameAdmin" class="form-label">Tour Name</label>
+                    <input type="text" class="form-control" id="tourNameAdmin" required>
+                    <div class="error-message text-danger" id="tourNameAdminError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" rows="3" required></textarea>
+                    <div class="error-message text-danger" id="descriptionError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Photo</label>
+                    <input type="file" class="form-control" id="photo" accept="image/*" required>
+                    <div class="error-message text-danger" id="photoError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="price" step="0.01" required>
+                    <div class="error-message text-danger" id="priceError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" required>
+                    <div class="error-message text-danger" id="locationError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="meetupLocation" class="form-label">Meetup Location</label>
+                    <input type="text" class="form-control" id="meetupLocation" required>
+                    <div class="error-message text-danger" id="meetupLocationError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="startTime" class="form-label">Start Time</label>
+                    <input type="datetime-local" class="form-control" id="startTime" required>
+                    <div class="error-message text-danger" id="startTimeError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="endTime" class="form-label">End Time</label>
+                    <input type="datetime-local" class="form-control" id="endTime" required>
+                    <div class="error-message text-danger" id="endTimeError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="maxParticipants" class="form-label">Max Participants</label>
+                    <input type="number" class="form-control" id="maxParticipants" required>
+                    <div class="error-message text-danger" id="maxParticipantsError"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="rating" class="form-label">Rating</label>
+                    <input type="number" class="form-control" id="rating" step="0.1" required>
+                    <div class="error-message text-danger" id="ratingError"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Tour</button>
+            </form>
+            <hr>
+
+            <!-- Delete Tour Form -->
+            <h3>Delete a Tour</h3>
+            <form id="delete-tour-form">
+                <div class="mb-3">
+                    <label for="deleteTourId" class="form-label">Tour ID</label>
+                    <input type="text" class="form-control" id="deleteTourId" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Delete Tour</button>
+            </form>
+            <hr>
+
+            <!-- Update Access Form -->
+            <h3>Update User Access</h3>
+            <form id="update-access-form">
+                <div class="mb-3">
+                    <label for="userEmail" class="form-label">User Email</label>
+                    <input type="email" class="form-control" id="userEmail" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newAccessLevel" class="form-label">New Access Level</label>
+                    <select class="form-control" id="newAccessLevel" required>
+                        <option value="">Select Access Level</option>
+                        <option value="tourist">Tourist</option>
+                        <option value="guide">Guide</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Access</button>
+            </form>
+            <hr>
+            <br>
+            <!-- View Feedback -->
+            <h3>Feedback</h3>
+            <div id="feedback-container">
+                <!-- Feedback will be displayed here -->
             </div>
         </div>
     </div>
