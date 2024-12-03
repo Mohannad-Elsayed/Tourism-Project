@@ -95,7 +95,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
 
         // Create user data object
         const userData = {
-            name: name,
+            username: name,
             email: email,
             phone: phone,
             profilePictureURL: profilePictureURL,

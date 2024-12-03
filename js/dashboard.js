@@ -23,16 +23,116 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'register.html';
         }
     });
+
+    // Handle Update Profile Form Submission
+    document.getElementById('user-info-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        // Clear previous error messages
+        ['usernameError', 'fullnameError', 'addressError', 'stateError', 'numberError'].forEach(id => {
+            document.getElementById(id).textContent = '';
+        });
+
+        // Get form values
+        const username = document.getElementById('username').value.trim();
+        const fullname = document.getElementById('fullname').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const number = document.getElementById('number').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const profilePictureFile = document.getElementById('profilePictureInput').files[0];
+
+        let isValid = true;
+
+        // Validation
+        if (username.length < 4) {
+            isValid = false;
+            document.getElementById('usernameError').textContent = 'Username must be at least 4 characters long.';
+        }
+        if (fullname.length < 4) {
+            isValid = false;
+            document.getElementById('fullnameError').textContent = 'Full name must be at least 4 characters long.';
+        }
+        if (address.length === 0) {
+            isValid = false;
+            document.getElementById('addressError').textContent = 'Please enter your address.';
+        }
+        if (state.length === 0) {
+            isValid = false;
+            document.getElementById('stateError').textContent = 'Please enter your state.';
+        }
+        const phoneRegex = /^[0-9]{1,11}$/;
+        if (!phoneRegex.test(number)) {
+            isValid = false;
+            document.getElementById('numberError').textContent = 'Please enter a valid phone number (1-11 digits).';
+        }
+
+        if (!isValid) {
+            return;
+        }
+
+        try {
+            let profilePicture = document.getElementById('profilePictureInput').files[0];
+            var profilePictureURL = document.getElementById('profilePictureInput').src;
+            console.log(profilePictureURL);
+            // If a new profile picture is selected, upload it
+            if (profilePictureFile) {
+                const formData = new FormData();
+                formData.append('file', profilePicture);
+                formData.append('upload_preset', 'saprojectedu'); // Replace with your upload preset
+
+                const cloudName = 'dprlulqf4'; // Replace with your Cloudinary cloud name
+                const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+
+                const uploadResponse = await fetch(uploadUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error('Image upload failed.');
+                }
+
+                const uploadData = await uploadResponse.json();
+                profilePictureURL = uploadData.secure_url;
+            }
+
+            // Update user data in Firestore
+            const userId = auth.currentUser.uid;
+            await db.collection('users').doc(userId).update({
+                username: username,
+                fullname: fullname,
+                address: address,
+                state: state,
+                number: number,
+                profilePictureURL: profilePictureURL
+            });
+
+            alert('Profile updated successfully!');
+            // Optionally, refresh the user info
+            db.collection('users').doc(userId).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const updatedData = doc.data();
+                        displayUserInfo(updatedData, email);
+                    }
+                });
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            alert('Failed to update profile. Please try again.');
+        }
+    });
 });
 
 function displayUserInfo(userData, email) {
     const userInfoDiv = document.getElementById('user-info');
-    userInfoDiv.innerHTML = `
-        <h2>Welcome, ${userData.name}</h2>
-        <img src="${userData.profilePictureURL}" alt="Profile Picture" class="img-thumbnail mb-3" style="width: 150px;">
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${userData.phone}</p>
-    `;
+    userInfoDiv.querySelector('#profilePicture').src = userData.profilePictureURL || 'default-profile.png';
+    userInfoDiv.querySelector('#username').value = userData.username || '';
+    userInfoDiv.querySelector('#fullname').value = userData.fullname || '';
+    userInfoDiv.querySelector('#address').value = userData.address || '';
+    userInfoDiv.querySelector('#state').value = userData.state || '';
+    userInfoDiv.querySelector('#number').value = userData.number || '';
+    userInfoDiv.querySelector('#email').value = email || '';
 }
 
 function fetchBookedTours(userId) {
