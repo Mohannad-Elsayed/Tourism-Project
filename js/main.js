@@ -2,8 +2,6 @@ const firebaseConfig = {
     apiKey: "AIzaSyBB_8JRR7pehfVX2lNy_xJWwkSSlKgYghU",
     authDomain: "sa-project-edu.firebaseapp.com",
     projectId: "sa-project-edu",
-    // Remove or comment out storageBucket if not using Firebase Storage
-    // storageBucket: "sa-project-edu.appspot.com",
     messagingSenderId: "360441031760",
     appId: "1:360441031760:web:74b6f95d885cef9934b555",
     measurementId: "G-6C2JWVGH4Y"
