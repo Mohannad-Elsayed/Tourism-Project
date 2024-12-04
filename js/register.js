@@ -403,3 +403,19 @@ document.getElementById('login-form').addEventListener('submit', async function(
     }
 });
 
+// Forgot Password Functionality
+document.getElementById('forgotPasswordLink').addEventListener('click', function(event) {
+    event.preventDefault();
+    const email = prompt('Please enter your email address to reset your password:');
+    if (email) {
+        auth.sendPasswordResetEmail(email)
+            .then(() => {
+                alert('Password reset email sent. Please check your inbox.');
+            })
+            .catch((error) => {
+                const errorMessage = errorMessages[AUTH_ERROR_CODES[error.code]] || 'An error occurred. Please try again.';
+                alert('Error: ' + errorMessage);
+            });
+        }
+});
+
