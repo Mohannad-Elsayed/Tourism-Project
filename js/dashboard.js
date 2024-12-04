@@ -259,7 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     maxParticipants: maxParticipants,
                     rating: rating, 
                     guide: guideName, 
-                    guideRef: db.collection('users').doc(guideId) // Reference to guide document
+                    guideRef: db.collection('users').doc(guideId),
+                    guideId: guideId
                 });
 
                 alert('Tour added successfully!');
@@ -419,7 +420,6 @@ function displayDashboardBasedOnAccess(accessLevel) {
         adminDashboard.style.display = 'none';
         // Load booked tours and feedback sections
         loadBookedTours();
-        loadFeedbackSection();
     } else if (accessLevel === 'guide') {
         touristDashboard.style.display = 'none';
         guideDashboard.style.display = 'block';
@@ -439,88 +439,135 @@ function displayDashboardBasedOnAccess(accessLevel) {
     }
 }
 
-// Function to load booked tours for tourists
-function loadBookedTours() {
-    const toursContainer = document.getElementById('tours-container');
-    const userId = auth.currentUser.uid;
 
-    db.collection('bookings').where('userId', '==', userId).get()
-        .then(querySnapshot => {
-            toursContainer.innerHTML = ''; // Clear existing content
-            querySnapshot.forEach(doc => {
-                const tour = doc.data();
-                const tourCard = createTourCard(tour);
-                toursContainer.appendChild(tourCard);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching booked tours:', error);
-        });
+// Function to display tours
+async function loadBookedTours() {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            console.error('No authenticated user found.');
+            return;
+        }
+
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        if (!userDoc.exists) {
+            console.error('User data not found.');
+            return;
+        }
+
+        const registeredToursIDs = userDoc.data().registeredTours || [];
+        const tourPromises = registeredToursIDs.map(tourID => db.collection('tours').doc(tourID).get());
+        const tourDocs = await Promise.all(tourPromises);
+
+        const registeredToursArr = tourDocs
+            .filter(doc => doc.exists)
+            .map(doc => doc.data());
+
+        console.log(registeredToursArr);
+        renderTours(registeredToursArr, 'tours-container');
+    } catch (error) {
+        console.error('Error fetching booked tours:', error);
+    }
 }
+
 
 // Function to load active tours for guides
 function loadActiveTours() {
     const activeToursContainer = document.getElementById('active-tours-container');
     const userId = auth.currentUser.uid;
+    
+    var activetours = [];
 
-    db.collection('tours').where('guideId', '==', userId).where('status', '==', 'active').get()
+    db.collection('tours').where('guideId', '==', userId).get()
         .then(querySnapshot => {
             activeToursContainer.innerHTML = ''; // Clear existing content
             querySnapshot.forEach(doc => {
                 const tour = doc.data();
-                const tourCard = createTourCard(tour);
-                activeToursContainer.appendChild(tourCard);
+                activetours.push(tour);
             });
+            renderTours(activetours, 'active-tours-container');
         })
         .catch(error => {
             console.error('Error fetching active tours:', error);
         });
 }
 
-// Function to create a tour card (used for both booked and active tours)
-function createTourCard(tour) {
-    const col = document.createElement('div');
-    col.className = 'col-lg-4 col-md-6 mb-4';
+// Function to render tours on the page
+function renderTours(tours, divName) {
+    var tourCardsDiv = document.getElementById(divName);
+    tourCardsDiv.innerHTML = ''; // Clear existing content
 
-    const card = document.createElement('div');
-    card.className = 'card h-100';
+    var rowDiv = document.createElement('div');
+    rowDiv.className = 'row g-4 justify-content-center';
 
-    const img = document.createElement('img');
-    img.className = 'card-img-top';
-    img.src = tour.imageURL || 'default-tour.jpg';
-    img.alt = tour.name;
-    card.appendChild(img);
+    tours.forEach(function(tour) {
+        var colDiv = document.createElement('div');
+        colDiv.className = 'col-lg-4 col-md-6';
 
-    const cardBody = document.createElement('div');
-    cardBody.className = 'card-body';
+        var cardDiv = document.createElement('div');
+        cardDiv.className = 'package-item';
 
-    const cardTitle = document.createElement('h5');
-    cardTitle.className = 'card-title';
-    cardTitle.textContent = tour.name;
-    cardBody.appendChild(cardTitle);
+        // Image banner
+        var imgDiv = document.createElement('div');
+        imgDiv.className = 'overflow-hidden';
+        var img = document.createElement('img');
+        img.className = 'img-fluid';
+        img.src = tour.imageURL;
+        imgDiv.appendChild(img);
+        cardDiv.appendChild(imgDiv);
 
-    const cardText = document.createElement('p');
-    cardText.className = 'card-text';
-    cardText.textContent = tour.description || 'No description available.';
-    cardBody.appendChild(cardText);
+        // Details
+        var detailsDiv = document.createElement('div');
+        detailsDiv.className = 'd-flex border-bottom';
 
-    card.appendChild(cardBody);
+        // Location
+        var locationSmall = document.createElement('small');
+        locationSmall.className = 'flex-fill text-center border-end py-2';
+        locationSmall.innerHTML = '<i class="fa fa-map-marker-alt text-primary me-2"></i>' + tour.location;
+        detailsDiv.appendChild(locationSmall);
 
-    return col.appendChild(card);
+        // Start Time
+        var timeSmall = document.createElement('small');
+        timeSmall.className = 'flex-fill text-center border-end py-2';
+        timeSmall.innerHTML = '<i class="fa fa-calendar-alt text-primary me-2"></i>' + tour.startTime.toDate().toLocaleDateString();
+        detailsDiv.appendChild(timeSmall);
+
+        // Participants
+        var participantsSmall = document.createElement('small');
+        participantsSmall.className = 'flex-fill text-center py-2';
+        participantsSmall.innerHTML = '<i class="fa fa-user text-primary me-2"></i>' + tour.maxParticipants + ' Spots';
+        detailsDiv.appendChild(participantsSmall);
+
+        cardDiv.appendChild(detailsDiv);
+
+        // Card body
+        var cardBody = document.createElement('div');
+        cardBody.className = 'text-center p-4';
+
+        // Tour Name
+        var title = document.createElement('h3');
+        title.className = 'mb-3'; 
+        title.textContent = tour.name;
+        cardBody.appendChild(title);
+
+        // Description
+        var desc = document.createElement('p');
+        desc.textContent = tour.description;
+        cardBody.appendChild(desc);
+
+        cardDiv.appendChild(cardBody);
+        colDiv.appendChild(cardDiv);
+        rowDiv.appendChild(colDiv);
+    });
+    tourCardsDiv.appendChild(rowDiv);
 }
+
 
 // Function to load feedback section for tourists
 function loadFeedbackSection() {
     // Implement feedback loading if necessary
     // For example, fetching previous feedback or setting up feedback form handlers
 }
-
-// Call fetchBookedTours after fetching user info
-auth.onAuthStateChanged(user => {
-    if (user) {
-        fetchBookedTours(user.uid);
-    }
-});
 
 // Feedback form submission
 document.getElementById('feedback-form').addEventListener('submit', event => {
