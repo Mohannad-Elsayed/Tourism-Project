@@ -146,18 +146,37 @@ function renderTours(tours) {
 let selectedTourId = null;
 
 // Function to handle booking
-function bookTour(tourId) {
-    auth.onAuthStateChanged(function(user) {
+async function bookTour(tourId) {
+    auth.onAuthStateChanged(async function(user) {
         if (user) {
-            // Store the selected tour ID
-            selectedTourId = tourId;
+            try {
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    const accessLevel = userData.access;
+                    console.log('Access Level:', accessLevel);
+                    if (accessLevel != 'tourist') {
+                        alert('You must log in as a tourist to book a tour.');
+                        return;
+                    }
+                } else {
+                    console.error('No such document!');
+                }
+                console.log("User is logged in. Tour ID:", tourId);
 
-            // Show the payment form with animation
-            var paymentForm = document.getElementById('paymentForm');
-            paymentForm.style.display = 'block';
-            setTimeout(function() {
-                paymentForm.classList.add('show');
-            }, 10); // Slight delay to trigger transition
+                // Show the payment form with animation
+                var paymentForm = document.getElementById('paymentForm');
+                paymentForm.style.display = 'block';
+
+                // Store the selected tour ID
+                selectedTourId = tourId;
+
+                setTimeout(function() {
+                    paymentForm.classList.add('show');
+                }, 10); // Slight delay to trigger transition
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
         } else {
             // Prompt the user to log in
             alert('Please log in to book a tour.');
