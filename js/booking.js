@@ -59,7 +59,10 @@ function renderTours(tours) {
 
     tours.forEach(function(tour) {
         var colDiv = document.createElement('div');
-        colDiv.className = 'col-lg-4 col-md-6';
+        colDiv.className = 'col-lg-4 col-md-6 tour-card';
+        colDiv.setAttribute('data-name', tour.name.toLowerCase());
+        colDiv.setAttribute('data-location', tour.location.toLowerCase());
+        colDiv.setAttribute('data-description', tour.description.toLowerCase());
 
         var cardDiv = document.createElement('div');
         cardDiv.className = 'package-item';
@@ -291,6 +294,34 @@ document.getElementById('proceedPaymentBtn').addEventListener('click', function(
         alert('User not authenticated.');
         window.location.href = 'register.html';
     }
+});
+
+// Add event listener for the "Search" button
+document.getElementById('searchBtn').addEventListener('click', function() {
+    var query = document.getElementById('searchInput').value.toLowerCase();
+    var tourCards = document.querySelectorAll('.tour-card');
+
+    tourCards.forEach(function(card) {
+        var name = card.getAttribute('data-name');
+        var location = card.getAttribute('data-location');
+        var description = card.getAttribute('data-description');
+
+        if (name.includes(query) || location.includes(query) || description.includes(query)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+// Add event listener for the "Clear" button
+document.getElementById('clearSearchBtn').addEventListener('click', function() {
+    document.getElementById('searchInput').value = '';
+    var tourCards = document.querySelectorAll('.tour-card');
+
+    tourCards.forEach(function(card) {
+        card.style.display = 'block';
+    });
 });
 
 // Call the function to display tours

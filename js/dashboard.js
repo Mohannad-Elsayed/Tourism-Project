@@ -132,14 +132,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add Tour Form Submission
         document.getElementById('add-tour-form').addEventListener('submit', async function(event) {
             event.preventDefault();
-
+        
+            // Disable the submit button to prevent multiple submissions
+            const submitButton = document.querySelector('#add-tour-form button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...'; // Optional: Change button text to indicate processing
+        
             // Clear previous error messages
-            ['tourIdError', 'tourNameAdminError', 'descriptionError', 'photoError', 'priceError', 'locationError', 'meetupLocationError', 'startTimeError', 'endTimeError', 'maxParticipantsError', 'ratingError', 'guideError'].forEach(id => {
+            ['addTourIdError', 'tourNameAdminError', 'descriptionError', 'photoError', 'priceError', 'locationError', 'meetupLocationError', 'startTimeError', 'endTimeError', 'maxParticipantsError', 'ratingError', 'guideError'].forEach(id => {
                 document.getElementById(id).textContent = '';
             });
-
+        
             // Get form values
-            const tourId = document.getElementById('tourId').value.trim();
+            const tourId = document.getElementById('addTourId').value.trim();
             const tourName = document.getElementById('tourNameAdmin').value.trim();
             const description = document.getElementById('description').value.trim();
             const photoFile = document.getElementById('photo').files[0];
@@ -157,13 +162,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const guideName = document.getElementById('guide').value.trim();
             const rating = parseFloat(ratingValue);
             const guideId = document.getElementById('guide').value;
-
+        
             let isValid = true;
-
+        
             // Input validation and error messages
             if (!tourId) {
                 isValid = false;
-                document.getElementById('tourIdError').textContent = 'Tour ID is required.';
+                document.getElementById('addTourIdError').textContent = 'Tour ID is required.';
             }
             if (!tourName) {
                 isValid = false;
@@ -196,6 +201,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!startTimeInput || isNaN(startTime.getTime())) {
                 isValid = false;
                 document.getElementById('startTimeError').textContent = 'Please enter a valid start time.';
+            } else {
+                const currentTime = new Date();
+                if (startTime <= currentTime) {
+                    isValid = false;
+                    document.getElementById('startTimeError').textContent = 'Start time must be in the future.';
+                }
+                if (startTime >= endTime) {
+                    isValid = false;
+                    document.getElementById('startTimeError').textContent = 'Start time must be before end time.';
+                }
             }
             if (!endTimeInput || isNaN(endTime.getTime())) {
                 isValid = false;
@@ -213,11 +228,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 isValid = false;
                 document.getElementById('guideError').textContent = 'Please select a guide.';
             }
-
+        
             if (!isValid) {
                 return;
             }
-
+        
             try {
                 // Check for duplicate ID
                 const existingTour = await db.collection('tours').doc(tourId).get();
@@ -225,27 +240,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Tour ID already exists. Please use a unique ID.');
                     return;
                 }
-
+        
                 // Upload photo to Cloudinary
                 const formData = new FormData();
                 formData.append('file', photoFile);
                 formData.append('upload_preset', 'saprojectedu');
-
+        
                 const cloudName = 'dprlulqf4';
                 const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
-
+        
                 const uploadResponse = await fetch(uploadUrl, {
                     method: 'POST',
                     body: formData
                 });
-
+        
                 if (!uploadResponse.ok) {
                     throw new Error('Image upload failed.');
                 }
-
+        
                 const uploadData = await uploadResponse.json();
                 const photoURL = uploadData.secure_url;
-
+        
                 // Add tour to 'tours' collection
                 await db.collection('tours').doc(tourId).set({
                     name: tourName,
@@ -262,12 +277,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     guideRef: db.collection('users').doc(guideId),
                     guideId: guideId
                 });
-
+        
                 alert('Tour added successfully!');
                 document.getElementById('add-tour-form').reset();
             } catch (error) {
                 console.error('Error adding tour:', error);
                 alert('Failed to add tour. Please try again.');
+            } finally {
+                // Re-enable the submit button after submission is complete
+                submitButton.disabled = false;
+                submitButton.textContent = 'Add Tour'; // Optional: Reset button text
             }
         });
 
@@ -576,12 +595,12 @@ document.getElementById('feedback-form').addEventListener('submit', async event 
     event.preventDefault();
 
     // Clear previous error messages
-    ['tourIdError', 'messageError'].forEach(id => {
+    ['feedbackTourIdError', 'messageError'].forEach(id => {
         document.getElementById(id).textContent = '';
     });
 
     // Get form values
-    const tourId = document.getElementById('tourId').value.trim();
+    const tourId = document.getElementById('feedbackTourId').value.trim();
     const message = document.getElementById('message').value.trim();
     const userId = auth.currentUser.uid;
 
@@ -590,7 +609,7 @@ document.getElementById('feedback-form').addEventListener('submit', async event 
     // Validation
     if (!tourId) {
         isValid = false;
-        document.getElementById('tourIdError').textContent = 'Tour ID is required.';
+        document.getElementById('feedbackTourIdError').textContent = 'Tour ID is required.';
     }
     if (!message) {
         isValid = false;
@@ -605,7 +624,7 @@ document.getElementById('feedback-form').addEventListener('submit', async event 
         // Check if tourId exists
         const tourDoc = await db.collection('tours').doc(tourId).get();
         if (!tourDoc.exists) {
-            document.getElementById('tourIdError').textContent = 'Tour ID does not exist.';
+            document.getElementById('feedbackTourIdError').textContent = 'Tour ID does not exist.';
             return;
         }
 
