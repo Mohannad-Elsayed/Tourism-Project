@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
 
             // Clear previous error messages
-            ['tourIdError', 'tourNameAdminError', 'descriptionError', 'photoError', 'priceError', 'locationError', 'meetupLocationError', 'startTimeError', 'endTimeError', 'maxParticipantsError', 'ratingError'].forEach(id => {
+            ['tourIdError', 'tourNameAdminError', 'descriptionError', 'photoError', 'priceError', 'locationError', 'meetupLocationError', 'startTimeError', 'endTimeError', 'maxParticipantsError', 'ratingError', 'guideError'].forEach(id => {
                 document.getElementById(id).textContent = '';
             });
 
@@ -154,7 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const maxParticipantsValue = document.getElementById('maxParticipants').value.trim();
             const maxParticipants = parseInt(maxParticipantsValue);
             const ratingValue = document.getElementById('rating').value.trim();
+            const guideName = document.getElementById('guide').value.trim();
             const rating = parseFloat(ratingValue);
+            const guideId = document.getElementById('guide').value;
 
             let isValid = true;
 
@@ -166,6 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!tourName) {
                 isValid = false;
                 document.getElementById('tourNameAdminError').textContent = 'Tour Name is required.';
+            }
+            if (!guideName) {
+                isValid = false;
+                document.getElementById('guideError').textContent = 'Guide Name is required.';
             }
             if (!description) {
                 isValid = false;
@@ -202,6 +208,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!ratingValue || isNaN(rating)) {
                 isValid = false;
                 document.getElementById('ratingError').textContent = 'Please enter a valid rating.';
+            }
+            if (!guideId) {
+                isValid = false;
+                document.getElementById('guideError').textContent = 'Please select a guide.';
             }
 
             if (!isValid) {
@@ -247,7 +257,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     startTime: firebase.firestore.Timestamp.fromDate(startTime),
                     endTime: firebase.firestore.Timestamp.fromDate(endTime),
                     maxParticipants: maxParticipants,
-                    rating: rating
+                    rating: rating, 
+                    guide: guideName, 
+                    guideRef: db.collection('users').doc(guideId) // Reference to guide document
                 });
 
                 alert('Tour added successfully!');
@@ -357,6 +369,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Call loadFeedback
         loadFeedback();
+
+        // Load guides and populate the guide dropdown
+        function loadGuides() {
+            const guideSelect = document.getElementById('guide');
+            db.collection('users').where('access', '==', 'guide').get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach(doc => {
+                        const userData = doc.data();
+                        const option = document.createElement('option');
+                        option.value = doc.id; // Store guide's user ID
+                        option.textContent = userData.name || userData.username || userData.email;
+                        guideSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching guides:', error);
+                });
+        }
+
+        // Call loadGuides to populate the dropdown
+        loadGuides();
     }
 
     // Additional functions can be added here, such as handling booked tours and feedback
@@ -397,8 +430,6 @@ function displayDashboardBasedOnAccess(accessLevel) {
         touristDashboard.style.display = 'none';
         guideDashboard.style.display = 'none';
         adminDashboard.style.display = 'block';
-        // Load active tours section
-        loadActiveTours();
     } else {
         // If access level is undefined or unrecognized
         touristDashboard.style.display = 'none';
