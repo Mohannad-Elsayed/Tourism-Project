@@ -489,7 +489,6 @@
     align-items: center;
     min-height: 100vh;
     padding: 40px;
-    background: #73B5BD;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
@@ -513,7 +512,7 @@
 
 #paymentForm .title {
     font-size: 20px;
-    color: #5e8f94;
+    color: #15980a;
     padding-bottom: 5px;
 }
 
@@ -565,6 +564,22 @@
 #paymentForm .btn-primary:hover {
     background: #73B5BD;
 }
+
+#paymentForm .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    font-size: 17px;
+    background: #f00;
+    color: #fff;
+    margin-top: 5px;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+#paymentForm .btn-secondary:hover {
+    background: rgb(255, 129, 129);
+}
+
 
 #paymentForm input::-webkit-inner-spin-button,
 #paymentForm input::-webkit-outer-spin-button {

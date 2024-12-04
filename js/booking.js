@@ -234,7 +234,8 @@ document.getElementById('proceedPaymentBtn').addEventListener('click', function(
     }
 
     if (!isValid) {
-        alert(errorM);
+        let text_message = document.getElementById('paymentMessage');
+        text_message.innerHTML = errorM;
         return;
     }
 
