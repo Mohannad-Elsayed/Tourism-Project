@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&family=Poppins:wght@100;300;400;500;600&display=swap"
         rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
@@ -147,6 +147,127 @@
         <!-- Tour cards will be injected here -->
     </div>
 
+    <!-- Add the payment form inside a hidden div -->
+    <div id="paymentForm" style="display: none;">
+        <div class="container-payment">
+            <form action="#">
+
+                <div class="form-row">
+
+                    <div class="col-md-6">
+                        <h3 class="title">Billing Address</h3>
+
+                        <div class="form-group">
+                            <label for="name">Full Name:</label>
+                            <input type="text" class="form-control" id="paymentname" placeholder="Enter your full name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="paymentemail" placeholder="Enter email address"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input type="text" class="form-control" id="paymentaddress" placeholder="Enter address"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">City:</label>
+                            <input type="text" class="form-control" id="paymentcity" placeholder="Enter city" required>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label for="state">State:</label>
+                                <input type="text" class="form-control" id="paymentstate" placeholder="Enter state"
+                                    required>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="zip">Zip Code:</label>
+                                <input type="number" class="form-control" id="paymentzip" placeholder="123 456"
+                                    required>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="title">Payment</h3>
+
+                        <div class="form-group">
+                            <label for="name">Card Accepted:</label>
+                            <img src="https://i.ibb.co/X38b5PF/card-img.png" alt="">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardName">Name On Card:</label>
+                            <input type="text" class="form-control" id="paymentcardName" placeholder="Enter card name"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardNum">Credit Card Number:</label>
+                            <input type="number" class="form-control" id="paymentcardNum"
+                                placeholder="1111-2222-3333-4444" maxlength="19" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="">Exp Month:</label>
+                            <select class="form-control" id="paymentexpMonth">
+                                <option value="">Choose month</option>
+                                <option value="January">January</option>
+                                <option value="February">February</option>
+                                <option value="March">March</option>
+                                <option value="April">April</option>
+                                <option value="May">May</option>
+                                <option value="June">June</option>
+                                <option value="July">July</option>
+                                <option value="August">August</option>
+                                <option value="September">September</option>
+                                <option value="October">October</option>
+                                <option value="November">November</option>
+                                <option value="December">December</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="">Exp Year:</label>
+                                <select class="form-control" id="paymentexpYear">
+                                    <option value="">Choose Year</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2027">2027</option>
+                                    <option value="2027">2028</option>
+                                    <option value="2027">2029</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="cvv">CVV</label>
+                                <input type="number" class="form-control" id="paymentcvv" placeholder="1234" required>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <button id="cancelPaymentBtn" class="btn btn-secondary">Cancel</button>
+                    <button id="proceedPaymentBtn" class="btn btn-primary">Proceed</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Process Start -->
     <div class="container-xxl py-5">
@@ -242,6 +363,7 @@
     <script src="js/main.js"></script>
 
     <script src="js/booking.js"></script>
+
 </body>
 
 </html>

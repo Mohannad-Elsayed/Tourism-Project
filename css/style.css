@@ -451,3 +451,122 @@
     padding-right: 0;
     border-right: none;
 }
+
+/* Payment Form Styles */
+#paymentForm {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+
+#paymentForm.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#paymentForm * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-family: 'Poppins', sans-serif;
+    text-transform: capitalize;
+    transition: all 0.2s linear;
+}
+
+#paymentForm .container-payment {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px;
+    background: #73B5BD;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#paymentForm form {
+    width: 700px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 5px 5px 30px rgba(0, 0, 0, 0.2);
+}
+
+#paymentForm .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+#paymentForm .form-row .col-md-6 {
+    flex: 1 1 250px;
+}
+
+#paymentForm .title {
+    font-size: 20px;
+    color: #5e8f94;
+    padding-bottom: 5px;
+}
+
+#paymentForm .form-group {
+    margin: 15px 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#paymentForm .form-group label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+#paymentForm .form-control {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
+    font-size: 15px;
+}
+
+#paymentForm .form-control:focus {
+    border: 1px solid #000;
+}
+
+#paymentForm .form-row .form-group {
+    flex: 1 1;
+    margin-top: 5px;
+}
+
+#paymentForm .form-group img {
+    height: 34px;
+    margin-top: 5px;
+    filter: drop-shadow(0 0 1px #000);
+}
+
+#paymentForm .btn-primary {
+    width: 100%;
+    padding: 12px;
+    font-size: 17px;
+    background: #5e8f94;
+    color: #fff;
+    margin-top: 5px;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+#paymentForm .btn-primary:hover {
+    background: #73B5BD;
+}
+
+#paymentForm input::-webkit-inner-spin-button,
+#paymentForm input::-webkit-outer-spin-button {
+    display: none;
+}
