@@ -203,18 +203,14 @@
                 <h2>Give Feedback</h2>
                 <form id="feedback-form" class="needs-validation" novalidate>
                     <div class="mb-3">
-                        <label for="tourName" class="form-label">Tour Name</label>
-                        <input type="text" class="form-control" id="tourName" required>
-                        <div class="invalid-feedback">
-                            Please enter the tour name.
-                        </div>
+                        <label for="tourId" class="form-label">Tour ID</label>
+                        <input type="text" class="form-control" id="tourId" required>
+                        <div class="error-message text-danger" id="tourIdError"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="feedbackText" class="form-label">Your Feedback</label>
-                        <textarea class="form-control" id="feedbackText" rows="4" required></textarea>
-                        <div class="invalid-feedback">
-                            Please provide your feedback.
-                        </div>
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="4" required></textarea>
+                        <div class="error-message text-danger" id="messageError"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit Feedback</button>
                 </form>

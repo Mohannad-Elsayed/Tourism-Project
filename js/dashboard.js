@@ -331,45 +331,47 @@ document.addEventListener('DOMContentLoaded', () => {
         // Load Feedback
         function loadFeedback() {
             const feedbackContainer = document.getElementById('feedback-container');
+            feedbackContainer.innerHTML = '<h4>Loading feedback...</h4>';
+        
             db.collection('feedback').orderBy('timestamp', 'desc').get()
                 .then(querySnapshot => {
-                    feedbackContainer.innerHTML = '';
+                    feedbackContainer.innerHTML = ''; // Clear loading text
+                    if (querySnapshot.empty) {
+                        feedbackContainer.innerHTML = '<p>No feedback available.</p>';
+                        return;
+                    }
+        
                     querySnapshot.forEach(doc => {
                         const feedback = doc.data();
                         const feedbackCard = document.createElement('div');
                         feedbackCard.className = 'card mb-3';
-
-                        const cardBody = document.createElement('div');
-                        cardBody.className = 'card-body';
-
-                        const cardTitle = document.createElement('h5');
-                        cardTitle.className = 'card-title';
-                        cardTitle.textContent = feedback.tourName;
-
-                        const cardText = document.createElement('p');
-                        cardText.className = 'card-text';
-                        cardText.textContent = feedback.feedback;
-
-                        const timestamp = document.createElement('p');
-                        timestamp.className = 'card-text';
-                        const feedbackDate = feedback.timestamp.toDate().toLocaleString();
-                        timestamp.innerHTML = `<small class="text-muted">Submitted on ${feedbackDate}</small>`;
-
-                        cardBody.appendChild(cardTitle);
-                        cardBody.appendChild(cardText);
-                        cardBody.appendChild(timestamp);
-                        feedbackCard.appendChild(cardBody);
-
+                        feedbackCard.innerHTML = `
+                            <div class="card-body">
+                                <h5 class="card-title">Tour ID: ${feedback.tourId}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Email: ${feedback.email}</h6>
+                                <p class="card-text">${feedback.message}</p>
+                                <p class="card-text"><small class="text-muted">Submitted on ${feedback.timestamp ? feedback.timestamp.toDate().toLocaleString() : 'N/A'}</small></p>
+                            </div>
+                        `;
                         feedbackContainer.appendChild(feedbackCard);
                     });
                 })
                 .catch(error => {
-                    console.error('Error fetching feedback:', error);
+                    console.error('Error loading feedback:', error);
+                    feedbackContainer.innerHTML = '<p>Error loading feedback. Please try again later.</p>';
                 });
         }
-
-        // Call loadFeedback
-        loadFeedback();
+        
+        // Call loadFeedback within Admin Dashboard initialization
+        if (adminDashboard) {
+            // ...existing event listeners...
+        
+            // Call loadFeedback when admin dashboard is loaded
+            loadFeedback();
+        
+            // ...existing code...
+        }
+        
 
         // Load guides and populate the guide dropdown
         function loadGuides() {
@@ -570,34 +572,61 @@ function loadFeedbackSection() {
 }
 
 // Feedback form submission
-document.getElementById('feedback-form').addEventListener('submit', event => {
+document.getElementById('feedback-form').addEventListener('submit', async event => {
     event.preventDefault();
 
+    // Clear previous error messages
+    ['tourIdError', 'messageError'].forEach(id => {
+        document.getElementById(id).textContent = '';
+    });
+
     // Get form values
-    const tourName = document.getElementById('tourName').value.trim();
-    const feedbackText = document.getElementById('feedbackText').value.trim();
+    const tourId = document.getElementById('tourId').value.trim();
+    const message = document.getElementById('message').value.trim();
     const userId = auth.currentUser.uid;
 
-    // Validate form inputs
-    if (!tourName || !feedbackText) {
-        alert('Please fill in all fields.');
+    let isValid = true;
+
+    // Validation
+    if (!tourId) {
+        isValid = false;
+        document.getElementById('tourIdError').textContent = 'Tour ID is required.';
+    }
+    if (!message) {
+        isValid = false;
+        document.getElementById('messageError').textContent = 'Message cannot be empty.';
+    }
+
+    if (!isValid) {
         return;
     }
 
-    // Save feedback to Firestore
-    db.collection('feedback').add({
-            userId: userId,
-            tourName: tourName,
-            feedback: feedbackText,
+    try {
+        // Check if tourId exists
+        const tourDoc = await db.collection('tours').doc(tourId).get();
+        if (!tourDoc.exists) {
+            document.getElementById('tourIdError').textContent = 'Tour ID does not exist.';
+            return;
+        }
+
+        // Get user email
+        const userDoc = await db.collection('users').doc(userId).get();
+        const userEmail = userDoc.data().email;
+
+        // Save feedback to Firestore
+        await db.collection('feedback').add({
+            tourId: tourId,
+            email: userEmail,
+            message: message,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        .then(() => {
-            alert('Thank you for your feedback!');
-            document.getElementById('feedback-form').reset();
-        })
-        .catch(error => {
-            console.error('Error submitting feedback:', error);
         });
+
+        alert('Thank you for your feedback!');
+        document.getElementById('feedback-form').reset();
+    } catch (error) {
+        console.error('Error submitting feedback:', error);
+        alert('Failed to submit feedback. Please try again.');
+    }
 });
 
 // Apply validation styles to the feedback form
