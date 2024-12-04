@@ -265,6 +265,16 @@
     transform: scale(1.1);
 }
 
+.package-item .overflow-hidden {
+    height: 250px; /* Set a fixed height for image containers */
+}
+
+.package-item .overflow-hidden img {
+    width: 100%;    /* Full width */
+    height: 100%;   /* Match container height */
+    object-fit: cover; /* Crop image to fit container */
+}
+
 
 /*** Booking ***/
 .booking {
