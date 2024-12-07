@@ -113,7 +113,7 @@ document.getElementById('register-form').addEventListener('submit', async functi
         // Notify the user of successful registration
         alert('Registration successful! Please check your email to verify your account. Then you can login.');
 
-        window.location.href = 'register.html'; // Redirect to login page
+        window.location.href = 'register'; // Redirect to login page
     } catch (error) {
         console.error('Error during registration:', error);
         alert('Registration failed: ' + error.message);

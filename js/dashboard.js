@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // No user is signed in, redirect to login page
             alert('Please login to view this page.');
-            window.location.href = 'register.html';
+            window.location.href = 'register';
         }
     });
 

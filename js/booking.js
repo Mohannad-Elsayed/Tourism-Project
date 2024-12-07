@@ -183,7 +183,7 @@ async function bookTour(tourId) {
         } else {
             // Prompt the user to log in
             alert('Please log in to book a tour.');
-            window.location.href = 'register.html';
+            window.location.href = 'register';
         }
     });
 }
@@ -285,14 +285,14 @@ document.getElementById('proceedPaymentBtn').addEventListener('click', function(
             });
         }).then(function() {
             // Redirect to dashboard.html after successful updates
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dashboard';
         }).catch(function(error) {
             console.error("Transaction failed: ", error);
             alert('Failed to proceed with booking. Please try again.');
         });
     } else {
         alert('User not authenticated.');
-        window.location.href = 'register.html';
+        window.location.href = 'register';
     }
 });
 
