@@ -442,7 +442,7 @@ function displayDashboardBasedOnAccess(accessLevel) {
         // Load booked tours and feedback sections
         loadBookedTours();
     } else if (accessLevel === 'guide') {
-        touristDashboard.style.display = 'block';
+        touristDashboard.style.display = 'none';
         guideDashboard.style.display = 'block';
         adminDashboard.style.display = 'none';
         // Load active tours section
