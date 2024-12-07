@@ -383,12 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Call loadFeedback within Admin Dashboard initialization
         if (adminDashboard) {
-            // ...existing event listeners...
-        
-            // Call loadFeedback when admin dashboard is loaded
             loadFeedback();
-        
-            // ...existing code...
         }
         
 
@@ -414,7 +409,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadGuides();
     }
 
-    // Additional functions can be added here, such as handling booked tours and feedback
 });
 
 // Function to display user info

@@ -143,55 +143,55 @@
 
     <!-- Main Content -->
     <div class="container py-5">
-        <!-- Tourist Dashboard Section -->
-        <div id="tourist-dashboard" class="mb-5" style="display: none;">
-            <!-- User Info Section -->
-            <h2>Your Profile</h2>
-            <div id="user-info" class="mb-5 d-flex justify-content-center">
-                <div class="card" style="width: 400px;">
-                    <div class="card-body text-center">
-                        <!-- Profile Picture -->
-                        <img id="profilePicture" src="" alt="Profile Picture" class="img-thumbnail mb-3"
-                            style="width: 150px; height: 150px; object-fit: cover;">
-                        <input type="file" id="profilePictureInput" accept="image/*" class="form-control mb-3">
-                        <div class="error-message text-danger" id="pictureError"></div>
+        <!-- User Info Section -->
+        <h2>Your Profile</h2>
+        <div id="user-info" class="mb-5 d-flex justify-content-center">
+            <div class="card" style="width: 400px;">
+                <div class="card-body text-center">
+                    <!-- Profile Picture -->
+                    <img id="profilePicture" src="" alt="Profile Picture" class="img-thumbnail mb-3"
+                        style="width: 150px; height: 150px; object-fit: cover;">
+                    <input type="file" id="profilePictureInput" accept="image/*" class="form-control mb-3">
+                    <div class="error-message text-danger" id="pictureError"></div>
 
-                        <!-- User Information Form -->
-                        <form id="user-info-form" novalidate>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" class="form-control" id="username" required>
-                                <div class="error-message text-danger" id="usernameError"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="fullname" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullname" required>
-                                <div class="error-message text-danger" id="fullnameError"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" required>
-                                <div class="error-message text-danger" id="addressError"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="state" class="form-label">State</label>
-                                <input type="text" class="form-control" id="state" required>
-                                <div class="error-message text-danger" id="stateError"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="number" class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" id="number" required pattern="^[0-9]{1,11}$">
-                                <div class="error-message text-danger" id="numberError"></div>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email (Unmodifiable)</label>
-                                <input type="email" class="form-control" id="email" readonly>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Update Profile</button>
-                        </form>
-                    </div>
+                    <!-- User Information Form -->
+                    <form id="user-info-form" novalidate>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" required>
+                            <div class="error-message text-danger" id="usernameError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullname" required>
+                            <div class="error-message text-danger" id="fullnameError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" required>
+                            <div class="error-message text-danger" id="addressError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" class="form-control" id="state" required>
+                            <div class="error-message text-danger" id="stateError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="number" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="number" required pattern="^[0-9]{1,11}$">
+                            <div class="error-message text-danger" id="numberError"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email (Unmodifiable)</label>
+                            <input type="email" class="form-control" id="email" readonly>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+                    </form>
                 </div>
             </div>
+        </div>
+        <!-- Tourist Dashboard Section -->
+        <div id="tourist-dashboard" class="mb-5" style="display: none;">
             <!-- Booked Tours Section -->
             <h2>Your Booked Tours</h2>
             <div class="row" id="tours-container">
