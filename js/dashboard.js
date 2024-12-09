@@ -599,12 +599,6 @@ function renderTours(tours, divName) {
     tourCardsDiv.appendChild(rowDiv);
 }
 
-// Function to load feedback section for tourists
-function loadFeedbackSection() {
-    // Implement feedback loading if necessary
-    // For example, fetching previous feedback or setting up feedback form handlers
-}
-
 // Feedback form submission
 document.getElementById('feedback-form').addEventListener('submit', async event => {
     event.preventDefault();

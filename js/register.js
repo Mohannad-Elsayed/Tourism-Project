@@ -371,8 +371,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
     }
 
     try {
-        // Show a loading indicator or disable the login button if desired
-
+        
         // Sign in with Firebase Authentication
         await auth.signInWithEmailAndPassword(email, password);
 

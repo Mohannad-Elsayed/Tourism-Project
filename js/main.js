@@ -151,11 +151,6 @@ const db = firebase.firestore();
 
     // Expose updateNavbar to the global scope
     window.updateNavbar = updateNavbar;
-
-    // // Initial call to updateNavbar (if navbar is already loaded)
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     updateNavbar();
-    // });
     
 })(jQuery);
 
