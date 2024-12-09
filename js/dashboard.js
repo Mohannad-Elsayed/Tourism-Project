@@ -471,12 +471,18 @@ async function loadBookedTours() {
         }
 
         const registeredToursIDs = userDoc.data().registeredTours || [];
-        const tourPromises = registeredToursIDs.map(tourID => db.collection('tours').doc(tourID).get());
-        const tourDocs = await Promise.all(tourPromises);
+        const tourPromises = registeredToursIDs.map(async tourID => {
+            const doc = await db.collection('tours').doc(tourID).get();
+            if (doc.exists) {
+                const tourData = doc.data();
+                tourData.id = doc.id; // Include the tour ID
+                return tourData;
+            }
+            return null;
+        });
+        const tourDataArray = await Promise.all(tourPromises);
 
-        const registeredToursArr = tourDocs
-            .filter(doc => doc.exists)
-            .map(doc => doc.data());
+        const registeredToursArr = tourDataArray.filter(tour => tour !== null);
 
         console.log(registeredToursArr);
         renderTours(registeredToursArr, 'tours-container');
@@ -498,6 +504,7 @@ function loadActiveTours() {
             activeToursContainer.innerHTML = ''; // Clear existing content
             querySnapshot.forEach(doc => {
                 const tour = doc.data();
+                tour.id = doc.id; // Include the tour ID
                 activetours.push(tour);
             });
             renderTours(activetours, 'active-tours-container');
@@ -559,6 +566,12 @@ function renderTours(tours, divName) {
         var cardBody = document.createElement('div');
         cardBody.className = 'text-center p-4';
 
+        // Tour ID
+        var tourId = document.createElement('h5');
+        tourId.className = 'mb-3';
+        tourId.textContent = 'Tour ID: ' + tour.id;
+        cardBody.appendChild(tourId);
+
         // Tour Name
         var title = document.createElement('h3');
         title.className = 'mb-3'; 
@@ -570,13 +583,21 @@ function renderTours(tours, divName) {
         desc.textContent = tour.description;
         cardBody.appendChild(desc);
 
+        // Tour ID in lower right corner
+        var tourIdDiv = document.createElement('div');
+        tourIdDiv.style.textAlign = 'right';
+        var tourIdText = document.createElement('small');
+        tourIdText.style.color = 'red';
+        tourIdText.textContent = 'Tour ID: ' + tour.id;
+        tourIdDiv.appendChild(tourIdText);
+        cardBody.appendChild(tourIdDiv);
+
         cardDiv.appendChild(cardBody);
         colDiv.appendChild(cardDiv);
         rowDiv.appendChild(colDiv);
     });
     tourCardsDiv.appendChild(rowDiv);
 }
-
 
 // Function to load feedback section for tourists
 function loadFeedbackSection() {

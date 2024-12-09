@@ -31,7 +31,7 @@ function fetchAndDisplayTours(registeredTours) {
             var tours = [];
             querySnapshot.forEach(function(doc) {
                 var tour = doc.data();
-                tour.id = doc.id;
+                tour.id = doc.id; // Include the tour ID
 
                 // Convert Firestore Timestamp to Date
                 var startTime = tour.startTime.toDate();
@@ -120,6 +120,15 @@ function renderTours(tours) {
         var desc = document.createElement('p');
         desc.textContent = tour.description;
         cardBody.appendChild(desc);
+
+        // Tour ID in lower right corner
+        var tourIdDiv = document.createElement('div');
+        tourIdDiv.style.textAlign = 'right';
+        var tourIdText = document.createElement('small');
+        tourIdText.style.color = 'red';
+        tourIdText.textContent = 'Tour ID: ' + tour.id;
+        tourIdDiv.appendChild(tourIdText);
+        cardBody.appendChild(tourIdDiv);
 
         // "Book Now" button
         var buttonDiv = document.createElement('div');
